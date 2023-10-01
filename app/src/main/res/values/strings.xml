@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BPKPD</string>
+    <string name="login_title">Login Akun</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="btn_login">Login</string>
+</resources>
