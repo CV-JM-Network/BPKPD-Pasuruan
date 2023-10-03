@@ -4,15 +4,20 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import com.jaylangkung.bpkpd.databinding.ActivityMainBinding
+import com.jaylangkung.bpkpd.menu.home.HomeFragment
+import com.jaylangkung.bpkpd.menu.scan.ScanQrFragment
+import com.jaylangkung.bpkpd.menu.setting.SettingFragment
 import com.jaylangkung.bpkpd.utils.MySharedPreferences
+import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,7 +43,29 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        
+
+
+        binding.apply {
+            loadFragment(HomeFragment())
+
+            bottomBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+                override fun onTabSelected(lastIndex: Int, lastTab: AnimatedBottomBar.Tab?, newIndex: Int, newTab: AnimatedBottomBar.Tab) {
+                    when (newTab.id) {
+                        R.id.nav_home -> loadFragment(HomeFragment())
+                        R.id.nav_scan_qr -> loadFragment(ScanQrFragment())
+                        R.id.nav_settings -> loadFragment(SettingFragment())
+                    }
+                }
+            })
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+//            fragment.arguments = bundle
+            replace(R.id.fragment_container, fragment)
+            commit()
+        }
     }
 
     private fun askPermission() {
