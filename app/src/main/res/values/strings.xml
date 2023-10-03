@@ -13,4 +13,18 @@
     <string name="bottom_nav_scan_qr">Scan QR Code</string>
     <string name="bottom_nav_settings">Pengaturan</string>
     <string name="btn_back">tombol kembali</string>
+    <string name="salinan">Salinan</string>
+    <string name="icon_salinan">ikon tombol salinan</string>
+    <string name="pbb">PBB</string>
+    <string name="icon_pbb">ikon tombol PBB</string>
+    <string name="icon_sk_njop">icon tombol sk njop</string>
+    <string name="sk_njop">SK NJOP</string>
+    <string name="icon_bphtb">icon tombol bphtb</string>
+    <string name="bphtb">BPHTB</string>
+    <string name="icon_penagihan">icon tombol penagihan</string>
+    <string name="penagihan">Penagihan</string>
+    <string name="icon_bphtb_kolektif">icon tombol bphtb kolektif</string>
+    <string name="bphtb_kolektif">BPHTB Kolektif</string>
+    <string name="icon_npwpd">icon tombol npwpd</string>
+    <string name="npwpd">NPWPD</string>
 </resources>
