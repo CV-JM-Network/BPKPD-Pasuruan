@@ -3,11 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'com.google.devtools.ksp'
 }
 
 android {
     namespace 'com.jaylangkung.bpkpd'
     compileSdk 33
+
 
     defaultConfig {
         applicationId "com.jaylangkung.bpkpd"
@@ -17,6 +19,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def localProperties = new Properties()
+        localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+        buildConfigField "String", "API_KEY", localProperties['apiKey']
     }
 
     buildTypes {
@@ -24,24 +30,23 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        applicationVariants.all {
-            variant ->
-                variant.outputs.each {
-                    output ->
-                        def name = "BPKPD-Pasuruan.apk"
-                        output.outputFileName = name
-                }
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def name = "BPKPD-Pasuruan.apk"
+                output.outputFileName = name
+            }
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 
@@ -60,6 +65,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.2.1'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+
+    //room
+    implementation 'androidx.room:room-runtime:2.5.2'
+    ksp 'androidx.room:room-compiler:2.5.2'
+    implementation 'androidx.room:room-ktx:2.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -93,7 +104,7 @@ dependencies {
 
     //image getter from internet
     implementation 'com.github.bumptech.glide:glide:4.14.1'
-    kapt 'com.github.bumptech.glide:compiler:4.14.1'
+    ksp 'com.github.bumptech.glide:compiler:4.14.1'
 
     // dependency for slider view
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'

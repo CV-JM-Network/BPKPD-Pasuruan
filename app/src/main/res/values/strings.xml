@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">BPKPD</string>
+    <string name="app_name">BPKPD Pasuruan</string>
     <string name="login_title">Login Akun</string>
     <string name="email">Email</string>
     <string name="password">Kata Sandi</string>
     <string name="btn_login">Login</string>
+    <string name="app_logo">logo aplikasi</string>
+    <string name="email_cant_empty">Email tidak boleh kosong</string>
+    <string name="email_format_error">Format email salah</string>
+    <string name="password_cant_empty">Kata sandi tidak boleh kosong</string>
+    <string name="try_again">Silahkan Coba Lagi</string>
 </resources>
