@@ -28,6 +28,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".menu.scan.ScanQrDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".auth.SplashScreenActivity"
             android:exported="true">
             <intent-filter>

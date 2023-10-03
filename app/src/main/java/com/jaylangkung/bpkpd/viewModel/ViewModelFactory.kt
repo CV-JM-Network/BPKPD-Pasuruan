@@ -1,18 +1,19 @@
 package com.jaylangkung.bpkpd.viewModel
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory private constructor() : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory private constructor(private val application: Application) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            HomeViewModel() as T
+            HomeViewModel(application) as T
         } else if (modelClass.isAssignableFrom(ScanQrViewModel::class.java)) {
-            ScanQrViewModel() as T
+            ScanQrViewModel(application) as T
         } else if (modelClass.isAssignableFrom(SettingViewModel::class.java)) {
-            SettingViewModel() as T
+            SettingViewModel(application) as T
         } else {
             throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
@@ -23,10 +24,10 @@ class ViewModelFactory private constructor() : ViewModelProvider.NewInstanceFact
         private var INSTANCE: ViewModelFactory? = null
 
         @JvmStatic
-        fun getInstance(): ViewModelFactory {
+        fun getInstance(application: Application): ViewModelFactory {
             if (INSTANCE == null) {
                 synchronized(ViewModelFactory::class.java) {
-                    INSTANCE = ViewModelFactory()
+                    INSTANCE = ViewModelFactory(application)
                 }
             }
             return INSTANCE as ViewModelFactory

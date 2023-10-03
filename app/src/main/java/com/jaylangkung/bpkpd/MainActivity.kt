@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var myPreferences: MySharedPreferences
 
+    companion object {
+        const val EXTRA_FRAGMENT = "extra_fragment"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -36,7 +40,6 @@ class MainActivity : AppCompatActivity() {
 //                val iduser = myPreferences.getValue(Constants.USER_IDAKTIVASI).toString()
 //                addToken(iduser, token)
             } else {
-                // Handle the error
                 val exception = task.exception
                 exception?.message?.let {
                     Log.e(ContentValues.TAG, "Error retrieving FCM registration token: $it")
@@ -44,9 +47,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         binding.apply {
-            loadFragment(HomeFragment())
+            if (intent.hasExtra(EXTRA_FRAGMENT)) {
+                when (intent.getStringExtra(EXTRA_FRAGMENT)) {
+                    "home" -> loadFragment(HomeFragment())
+                    "scan" -> loadFragment(ScanQrFragment())
+                    "setting" -> loadFragment(SettingFragment())
+                }
+            } else {
+                loadFragment(HomeFragment())
+            }
+
 
             bottomBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
                 override fun onTabSelected(lastIndex: Int, lastTab: AnimatedBottomBar.Tab?, newIndex: Int, newTab: AnimatedBottomBar.Tab) {

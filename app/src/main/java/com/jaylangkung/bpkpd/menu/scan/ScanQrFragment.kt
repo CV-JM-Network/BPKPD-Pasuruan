@@ -1,5 +1,6 @@
 package com.jaylangkung.bpkpd.menu.scan
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,7 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.jaylangkung.bpkpd.databinding.FragmentScanQrBinding
-import com.jaylangkung.bpkpd.utils.Constants
 import com.jaylangkung.bpkpd.utils.ErrorHandler
-import com.jaylangkung.bpkpd.utils.MySharedPreferences
 import com.jaylangkung.bpkpd.viewModel.ScanQrViewModel
 import com.jaylangkung.bpkpd.viewModel.ViewModelFactory
 import es.dmoral.toasty.Toasty
@@ -23,19 +22,14 @@ class ScanQrFragment : Fragment() {
     private var _binding: FragmentScanQrBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ScanQrViewModel
-    private lateinit var myPreferences: MySharedPreferences
     private lateinit var codeScanner: CodeScanner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScanQrBinding.inflate(inflater, container, false)
-        val factory = ViewModelFactory.getInstance()
+        val factory = ViewModelFactory.getInstance(requireActivity().application)
         viewModel = ViewModelProvider(this, factory)[ScanQrViewModel::class.java]
-        myPreferences = MySharedPreferences(requireContext())
-
-        val idadmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
-        val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
 
         binding.apply {
             codeScanner = CodeScanner(requireContext(), scannerView).apply {
@@ -47,9 +41,22 @@ class ScanQrFragment : Fragment() {
                 isFlashEnabled = false
                 startPreview()
 
-                decodeCallback = DecodeCallback {
+                decodeCallback = DecodeCallback { qrString ->
                     requireActivity().runOnUiThread {
-//                        viewModel.getQrCode(it.text, idadmin, tokenAuth)
+                        val isValid = viewModel.validateQRCode(qrString.text)
+                        if (isValid) {
+                            activity?.let {
+                                val intent = Intent(it, ScanQrDetailActivity::class.java).apply {
+                                    putExtra(ScanQrDetailActivity.EXTRA_RESULT, qrString.text)
+                                }
+                                startActivity(intent)
+                                it.finish()
+                            }
+                        } else {
+                            Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
+                            startPreview()
+                        }
+
                     }
                 }
                 errorCallback = ErrorCallback {

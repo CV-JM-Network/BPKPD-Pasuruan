@@ -12,4 +12,5 @@
     <string name="bottom_nav_home">Beranda</string>
     <string name="bottom_nav_scan_qr">Scan QR Code</string>
     <string name="bottom_nav_settings">Pengaturan</string>
+    <string name="btn_back">tombol kembali</string>
 </resources>
