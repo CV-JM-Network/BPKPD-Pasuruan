@@ -121,7 +121,7 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
 
     // image picker
-    implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 
     // bottom navigation
     implementation 'nl.joery.animatedbottombar:library:1.1.0'

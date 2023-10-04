@@ -29,4 +29,15 @@
     <string name="npwpd">NPWPD</string>
     <string name="greetings">%1$s, \n%2$s</string>
     <string name="lihat_berkas">Lihat Berkas</string>
+    <string name="logout">Logout</string>
+    <string name="app_ver">App Version %1$s</string>
+    <string name="edit_profile">Edit Profil</string>
+    <string name="change_photo">Ganti Foto</string>
+    <string name="name">Nama</string>
+    <string name="address">Alamat</string>
+    <string name="phone">Nomor HP</string>
+    <string name="btn_save">Update Profil</string>
+    <string name="confirm_logout">Anda Yakin Ingin Logout?</string>
+    <string name="no">Tidak</string>
+    <string name="yes">Ya</string>
 </resources>
