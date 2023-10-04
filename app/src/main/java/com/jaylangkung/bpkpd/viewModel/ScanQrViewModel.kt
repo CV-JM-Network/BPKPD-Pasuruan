@@ -6,7 +6,10 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
 import com.jaylangkung.bpkpd.retrofit.RetrofitClient
 import com.jaylangkung.bpkpd.utils.Constants
@@ -22,6 +25,8 @@ class ScanQrViewModel(application: Application) : ViewModel() {
 
     private val appContext: Application = application
     private lateinit var myPreferences: MySharedPreferences
+
+    val berkasData: MutableLiveData<BerkasResponse> = MutableLiveData()
 
     fun validateQRCode(result: String, callback: (String) -> Unit) {
         myPreferences = MySharedPreferences(appContext)
@@ -44,10 +49,45 @@ class ScanQrViewModel(application: Application) : ViewModel() {
                 vibrate(appContext)
                 callback(result)
             } else {
-                // Handle other cases if needed
                 callback("invalid_qr_code")
             }
         }
+    }
+
+    fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
+//        val regex = Pattern.compile("https:\\/\\/bkd.jaylangkung.co.id\\/get_info_surat.php\\?nomor_berkas=(.*)")
+//        val matcher = regex.matcher(noSurat)
+//        return if (matcher.find()) {
+//            matcher.group(1)?.toString()
+//        } else {
+//            ""
+//        }
+
+        RetrofitClient.apiService.getBerkas(idAdmin, url, tokenAuth).enqueue(object : Callback<BerkasResponse> {
+            override fun onResponse(call: Call<BerkasResponse>, response: Response<BerkasResponse>) {
+                when (response.code()) {
+                    200 -> {
+                        berkasData.postValue(response.body())
+                    }
+
+                    400 -> {
+                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
+                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
+                    }
+
+                    else -> {
+                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
+                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
+                        ErrorHandler().responseHandler(appContext, "loginWebApp | onResponse", response.code().toString())
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<BerkasResponse>, t: Throwable) {
+                Toasty.error(appContext, t.message.toString(), Toasty.LENGTH_LONG).show()
+                ErrorHandler().responseHandler(appContext, "loginWebApp | onFailure", t.message.toString())
+            }
+        })
     }
 
     private fun vibrate(ctx: Context) {
@@ -60,7 +100,6 @@ class ScanQrViewModel(application: Application) : ViewModel() {
     }
 
     private fun loginWebApp(ctx: Context, idAdmin: String, deviceId: String, tokenAuth: String, callback: (Boolean) -> Unit) {
-
         RetrofitClient.apiService.loginWebapp(idAdmin, deviceId, tokenAuth).enqueue(object : Callback<LoginWebappResponse> {
             override fun onResponse(call: Call<LoginWebappResponse>, response: Response<LoginWebappResponse>) {
                 when (response.code()) {
@@ -96,4 +135,5 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         })
 
     }
+
 }

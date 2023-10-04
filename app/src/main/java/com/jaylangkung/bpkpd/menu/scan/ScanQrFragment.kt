@@ -44,6 +44,7 @@ class ScanQrFragment : Fragment() {
 
                 decodeCallback = DecodeCallback { qrString ->
                     requireActivity().runOnUiThread {
+                        loadingAnim.visibility = View.VISIBLE
                         viewModel.validateQRCode(qrString.text) { result ->
                             when (result) {
                                 "webapp_success" -> {
@@ -52,9 +53,11 @@ class ScanQrFragment : Fragment() {
                                     requireActivity().finish()
                                 }
                                 "webapp_failure" -> {
+                                    loadingAnim.visibility = View.GONE
                                     startPreview()
                                 }
                                 "invalid_qr_code" -> {
+                                    loadingAnim.visibility = View.GONE
                                     Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
                                     startPreview()
                                 }
@@ -67,25 +70,6 @@ class ScanQrFragment : Fragment() {
                                 }
                             }
                         }
-//                        if (isValid != "" && isValid != "webapp_success") {
-//                            activity?.let {
-//                                val intent = Intent(it, ScanQrDetailActivity::class.java).apply {
-//                                    putExtra(ScanQrDetailActivity.EXTRA_RESULT, qrString.text)
-//                                }
-//                                startActivity(intent)
-//                                it.finish()
-//                            }
-//                        } else if (isValid == "webapp_success") {
-//                            activity?.let {
-//                                val intent = Intent(it, MainActivity::class.java)
-//                                startActivity(intent)
-//                                it.finish()
-//                            }
-//                        } else {
-//                            Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
-//                            startPreview()
-//                        }
-
                     }
                 }
                 errorCallback = ErrorCallback {
