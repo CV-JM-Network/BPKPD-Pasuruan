@@ -44,25 +44,47 @@ class ScanQrFragment : Fragment() {
 
                 decodeCallback = DecodeCallback { qrString ->
                     requireActivity().runOnUiThread {
-                        val isValid = viewModel.validateQRCode(qrString.text)
-                        if (isValid != "" && isValid != "webapp_success") {
-                            activity?.let {
-                                val intent = Intent(it, ScanQrDetailActivity::class.java).apply {
-                                    putExtra(ScanQrDetailActivity.EXTRA_RESULT, qrString.text)
+                        viewModel.validateQRCode(qrString.text) { result ->
+                            when (result) {
+                                "webapp_success" -> {
+                                    val intent = Intent(requireContext(), MainActivity::class.java)
+                                    startActivity(intent)
+                                    requireActivity().finish()
                                 }
-                                startActivity(intent)
-                                it.finish()
+                                "webapp_failure" -> {
+                                    startPreview()
+                                }
+                                "invalid_qr_code" -> {
+                                    Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
+                                    startPreview()
+                                }
+                                else -> {
+                                    val intent = Intent(requireContext(), ScanQrDetailActivity::class.java).apply {
+                                        putExtra(ScanQrDetailActivity.EXTRA_RESULT, result)
+                                    }
+                                    startActivity(intent)
+                                    requireActivity().finish()
+                                }
                             }
-                        } else if (isValid == "webapp_success") {
-                            activity?.let {
-                                val intent = Intent(it, MainActivity::class.java)
-                                startActivity(intent)
-                                it.finish()
-                            }
-                        } else {
-                            Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
-                            startPreview()
                         }
+//                        if (isValid != "" && isValid != "webapp_success") {
+//                            activity?.let {
+//                                val intent = Intent(it, ScanQrDetailActivity::class.java).apply {
+//                                    putExtra(ScanQrDetailActivity.EXTRA_RESULT, qrString.text)
+//                                }
+//                                startActivity(intent)
+//                                it.finish()
+//                            }
+//                        } else if (isValid == "webapp_success") {
+//                            activity?.let {
+//                                val intent = Intent(it, MainActivity::class.java)
+//                                startActivity(intent)
+//                                it.finish()
+//                            }
+//                        } else {
+//                            Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
+//                            startPreview()
+//                        }
 
                     }
                 }
