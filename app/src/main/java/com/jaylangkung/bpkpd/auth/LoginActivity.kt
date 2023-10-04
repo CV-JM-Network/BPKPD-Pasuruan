@@ -14,7 +14,6 @@ import com.jaylangkung.bpkpd.utils.Constants
 import com.jaylangkung.bpkpd.utils.ErrorHandler
 import com.jaylangkung.bpkpd.utils.MySharedPreferences
 import es.dmoral.toasty.Toasty
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -85,6 +84,8 @@ class LoginActivity : AppCompatActivity() {
                         myPreferences.setValue(Constants.USER_ALAMAT, data.alamat)
                         myPreferences.setValue(Constants.USER_TELP, data.telp)
                         myPreferences.setValue(Constants.USER_FOTO, data.img)
+                        myPreferences.setValue(Constants.USER_IDLEVEL, data.idlevel.toString())
+                        myPreferences.setValue(Constants.USER_JUDUL, data.judul)
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         finish()
                     }
@@ -107,9 +108,7 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 binding.btnLogin.endAnimation()
-                ErrorHandler().responseHandler(
-                    this@LoginActivity, "loginProcess | onResponse", t.message.toString()
-                )
+                ErrorHandler().responseHandler(this@LoginActivity, "loginProcess | onResponse", t.message.toString())
             }
         })
     }

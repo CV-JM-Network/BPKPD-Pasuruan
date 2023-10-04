@@ -19,5 +19,6 @@ data class UserData(
     @SerializedName("img") val img: String,
     @SerializedName("judul") val judul: String,
     @SerializedName("nama") val nama: String,
-    @SerializedName("telp") val telp: String
+    @SerializedName("telp") val telp: String,
+    @SerializedName("tokenAuth") val tokenAuth: String
 )

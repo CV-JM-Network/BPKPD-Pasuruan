@@ -12,6 +12,7 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.databinding.FragmentScanQrBinding
 import com.jaylangkung.bpkpd.utils.ErrorHandler
 import com.jaylangkung.bpkpd.viewModel.ScanQrViewModel
@@ -44,11 +45,17 @@ class ScanQrFragment : Fragment() {
                 decodeCallback = DecodeCallback { qrString ->
                     requireActivity().runOnUiThread {
                         val isValid = viewModel.validateQRCode(qrString.text)
-                        if (isValid) {
+                        if (isValid != "" && isValid != "webapp_success") {
                             activity?.let {
                                 val intent = Intent(it, ScanQrDetailActivity::class.java).apply {
                                     putExtra(ScanQrDetailActivity.EXTRA_RESULT, qrString.text)
                                 }
+                                startActivity(intent)
+                                it.finish()
+                            }
+                        } else if (isValid == "webapp_success") {
+                            activity?.let {
+                                val intent = Intent(it, MainActivity::class.java)
                                 startActivity(intent)
                                 it.finish()
                             }

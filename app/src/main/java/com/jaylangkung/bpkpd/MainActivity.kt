@@ -50,9 +50,18 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             if (intent.hasExtra(EXTRA_FRAGMENT)) {
                 when (intent.getStringExtra(EXTRA_FRAGMENT)) {
-                    "home" -> loadFragment(HomeFragment())
-                    "scan" -> loadFragment(ScanQrFragment())
-                    "setting" -> loadFragment(SettingFragment())
+                    "home" -> {
+                        loadFragment(HomeFragment())
+                        bottomBar.selectTabById(R.id.nav_home, true)
+                    }
+                    "scan" -> {
+                        loadFragment(ScanQrFragment())
+                        bottomBar.selectTabById(R.id.nav_scan_qr, true)
+                    }
+                    "setting" -> {
+                        loadFragment(SettingFragment())
+                        bottomBar.selectTabById(R.id.nav_settings, true)
+                    }
                 }
             } else {
                 loadFragment(HomeFragment())

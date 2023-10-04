@@ -10,4 +10,6 @@ object Constants {
     const val USER_ALAMAT = "alamat"
     const val USER_TELP = "telp"
     const val USER_FOTO = "foto"
+    const val USER_IDLEVEL = "idlevel"
+    const val USER_JUDUL = "judul"
 }

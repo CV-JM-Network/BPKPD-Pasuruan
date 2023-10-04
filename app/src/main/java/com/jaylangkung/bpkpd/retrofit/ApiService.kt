@@ -2,6 +2,7 @@ package com.jaylangkung.bpkpd.retrofit
 
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.LoginResponse
+import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
 import com.jaylangkung.bpkpd.dataClass.RiwayatBerkasResponse
 import retrofit2.Call
 import retrofit2.http.Field
@@ -36,4 +37,12 @@ interface ApiService {
         @Field("posisi") posisi: String,
         @Header("Authorization") authorization: String,
     ): Call<RiwayatBerkasResponse>
+
+    @FormUrlEncoded
+    @POST("webapp")
+    fun loginWebapp(
+        @Field("idadmin") idadmin: String,
+        @Field("device_id") deviceId: String,
+        @Header("Authorization") authorization: String,
+    ): Call<LoginWebappResponse>
 }

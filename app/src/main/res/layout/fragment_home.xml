@@ -6,306 +6,314 @@
     android:layout_height="match_parent"
     tools:context=".menu.home.HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp">
+        android:scrollbars="none">
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/img_photo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:riv_corner_radius="10dp"
-            tools:src="@drawable/ic_profile" />
-
-        <TextView
-            android:id="@+id/tv_greetings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:fontFamily="sans-serif-black"
-            android:textColor="?attr/colorOnBackground"
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/img_photo"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_nama"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Lihat Berkas"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_photo" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_nama">
+            android:layout_margin="16dp">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/img_photo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:riv_corner_radius="10dp"
+                tools:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/tv_greetings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:fontFamily="sans-serif-black"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_photo"
+                app:layout_constraintStart_toEndOf="@+id/img_photo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_nama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/lihat_berkas"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_photo" />
 
             <LinearLayout
-                android:id="@+id/btn_salinan"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_nama">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_salinan"
-                    android:src="@drawable/ic_copy"
-                    app:tint="?attr/colorOnSecondaryContainer" />
+                <LinearLayout
+                    android:id="@+id/btn_salinan"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/salinan"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_salinan"
+                        android:src="@drawable/ic_copy"
+                        app:tint="?attr/colorOnSecondaryContainer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/salinan"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_pbb"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_pbb"
+                        android:src="@drawable/ic_home"
+                        app:tint="?attr/colorOnSecondaryContainer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/pbb"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/btn_pbb"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_pbb"
-                    android:src="@drawable/ic_home"
-                    app:tint="?attr/colorOnSecondaryContainer" />
+                <LinearLayout
+                    android:id="@+id/btn_sk_njop"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/pbb"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_sk_njop"
+                        android:src="@drawable/ic_feed"
+                        app:tint="?attr/colorOnSecondaryContainer" />
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/sk_njop"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
 
-        </LinearLayout>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+                <LinearLayout
+                    android:id="@+id/btn_bphtb"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/btn_sk_njop"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_bphtb"
+                        android:src="@drawable/ic_building"
+                        app:tint="?attr/colorOnSecondaryContainer" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_sk_njop"
-                    android:src="@drawable/ic_feed"
-                    app:tint="?attr/colorOnSecondaryContainer" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/bphtb"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/sk_njop"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_bphtb"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_bphtb"
-                    android:src="@drawable/ic_building"
-                    app:tint="?attr/colorOnSecondaryContainer" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/bphtb"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-            <LinearLayout
-                android:id="@+id/btn_penagihan"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_penagihan"
-                    android:src="@drawable/ic_bank"
-                    app:tint="?attr/colorOnSecondaryContainer" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/penagihan"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/btn_bphtb_kolektif"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_bphtb_kolektif"
-                    android:src="@drawable/ic_apartement"
-                    app:tint="?attr/colorOnSecondaryContainer" />
+                <LinearLayout
+                    android:id="@+id/btn_penagihan"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/bphtb_kolektif"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_penagihan"
+                        android:src="@drawable/ic_bank"
+                        app:tint="?attr/colorOnSecondaryContainer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/penagihan"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_bphtb_kolektif"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_bphtb_kolektif"
+                        android:src="@drawable/ic_apartement"
+                        app:tint="?attr/colorOnSecondaryContainer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/bphtb_kolektif"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
             <LinearLayout
-                android:id="@+id/btn_npwpd"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@string/icon_npwpd"
-                    android:src="@drawable/ic_profile"
-                    app:tint="?attr/colorOnSecondaryContainer" />
+                <LinearLayout
+                    android:id="@+id/btn_npwpd"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_box"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/npwpd"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="16sp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:contentDescription="@string/icon_npwpd"
+                        android:src="@drawable/ic_profile"
+                        app:tint="?attr/colorOnSecondaryContainer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/npwpd"
+                        android:textColor="?attr/colorOnSecondaryContainer"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </FrameLayout>

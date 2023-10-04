@@ -27,4 +27,6 @@
     <string name="bphtb_kolektif">BPHTB Kolektif</string>
     <string name="icon_npwpd">icon tombol npwpd</string>
     <string name="npwpd">NPWPD</string>
+    <string name="greetings">%1$s, \n%2$s</string>
+    <string name="lihat_berkas">Lihat Berkas</string>
 </resources>
