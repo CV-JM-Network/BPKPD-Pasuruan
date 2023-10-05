@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +20,9 @@ import es.dmoral.toasty.Toasty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 
 class ScanQrViewModel(application: Application) : ViewModel() {
@@ -90,6 +94,15 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertDate(rawDate: String) : String {
+        if (rawDate == "0000-00-00") return "-"
+        val formatter = SimpleDateFormat("yyyy-MM-dd", appContext.resources.configuration.locales.get(0))
+        val date = formatter.parse(rawDate)
+        val newFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", appContext.resources.configuration.locales.get(0))
+        return newFormatter.format(LocalDate.parse(date?.let { formatter.format(it) }))
+    }
+
     private fun vibrate(ctx: Context) {
         val vibrator = ContextCompat.getSystemService(ctx, Vibrator::class.java) as Vibrator
         if (Build.VERSION.SDK_INT >= 26) {
@@ -135,5 +148,4 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         })
 
     }
-
 }

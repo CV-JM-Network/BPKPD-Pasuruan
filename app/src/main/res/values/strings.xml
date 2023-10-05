@@ -40,4 +40,17 @@
     <string name="confirm_logout">Anda Yakin Ingin Logout?</string>
     <string name="no">Tidak</string>
     <string name="yes">Ya</string>
+    <string name="berkas_title">Berkas %1$s</string>
+    <string name="nomor_berkas">Nomor Berkas: %1$s Th. %2$s</string>
+    <string name="tgl_diterima">Diterima: %1$s</string>
+    <string name="tgl_selesai">Selesai: %1$s</string>
+    <string name="nama_pemohon">Nama: %1$s</string>
+    <string name="alamat_pemohon">Alamat: %1$s, %2$s</string>
+    <string name="kontak_pemohon">CP: %1$s</string>
+    <string name="permohonan">Permohonan: %1$s</string>
+    <string name="jml_permohonan">jml: %1$d</string>
+    <string name="status_berkas">Status: %1$s</string>
+    <string name="status_berkas_persen">%1$d%%</string>
+    <string name="catatan">Catatan:</string>
+    <string name="ditolak">Alasan Ditolak: %1$s</string>
 </resources>
