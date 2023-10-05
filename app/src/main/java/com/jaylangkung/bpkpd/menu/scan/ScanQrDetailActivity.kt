@@ -183,7 +183,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
                                 stubBerkas.layoutResource = R.layout.berkas_npwpd
                                 val stubBinding = BerkasNpwpdBinding.bind(stubBerkas.inflate())
                                 stubBinding.apply {
-                                    tvNomorBerkas.text = getString(R.string.nomor_berkas, data.dolar, data.tahun)
+                                    tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
 
                                 }
                             }
