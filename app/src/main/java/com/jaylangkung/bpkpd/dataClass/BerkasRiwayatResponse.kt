@@ -2,13 +2,13 @@ package com.jaylangkung.bpkpd.dataClass
 
 import com.google.gson.annotations.SerializedName
 
-data class RiwayatBerkasResponse(
-    @SerializedName("data") val data: List<RiwayatBerkasData>,
+data class BerkasRiwayatResponse(
+    @SerializedName("data") val data: List<BerkasRiwayatData>,
     @SerializedName("message") val message: String,
     @SerializedName("status") val status: String
 )
 
-data class RiwayatBerkasData(
+data class BerkasRiwayatData(
     @SerializedName("aksi") val aksi: String,
     @SerializedName("aksi_oleh_idadmin") val aksiOlehIdadmin: Int,
     @SerializedName("createddate") val createddate: String,

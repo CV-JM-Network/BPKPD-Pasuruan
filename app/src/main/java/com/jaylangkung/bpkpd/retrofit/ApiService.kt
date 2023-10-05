@@ -3,7 +3,7 @@ package com.jaylangkung.bpkpd.retrofit
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.LoginResponse
 import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
-import com.jaylangkung.bpkpd.dataClass.RiwayatBerkasResponse
+import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -31,12 +31,12 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("cek/riwayat/berkas")
-    fun cekRiwayatBerkas(
+    fun getRiwayatBerkas(
         @Field("idadmin") idadmin: String,
         @Field("url") url: String,
         @Field("posisi") posisi: String,
         @Header("Authorization") authorization: String,
-    ): Call<RiwayatBerkasResponse>
+    ): Call<BerkasRiwayatResponse>
 
     @FormUrlEncoded
     @POST("webapp")

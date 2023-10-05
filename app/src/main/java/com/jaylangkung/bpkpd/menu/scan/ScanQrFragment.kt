@@ -52,20 +52,20 @@ class ScanQrFragment : Fragment() {
                                     startActivity(intent)
                                     requireActivity().finish()
                                 }
+
                                 "webapp_failure" -> {
                                     loadingAnim.visibility = View.GONE
                                     startPreview()
                                 }
+
                                 "invalid_qr_code" -> {
                                     loadingAnim.visibility = View.GONE
                                     Toasty.error(requireContext(), "QR Code tidak valid", Toasty.LENGTH_LONG).show()
                                     startPreview()
                                 }
+
                                 else -> {
-                                    val intent = Intent(requireContext(), ScanQrDetailActivity::class.java).apply {
-                                        putExtra(ScanQrDetailActivity.EXTRA_RESULT, result)
-                                    }
-                                    startActivity(intent)
+                                    startActivity(Intent(requireContext(), ScanQrDetailActivity::class.java))
                                     requireActivity().finish()
                                 }
                             }

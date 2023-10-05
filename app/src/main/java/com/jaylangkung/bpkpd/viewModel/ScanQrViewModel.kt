@@ -7,11 +7,11 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
+import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
 import com.jaylangkung.bpkpd.retrofit.RetrofitClient
 import com.jaylangkung.bpkpd.utils.Constants
 import com.jaylangkung.bpkpd.utils.ErrorHandler
@@ -31,13 +31,14 @@ class ScanQrViewModel(application: Application) : ViewModel() {
     private lateinit var myPreferences: MySharedPreferences
 
     val berkasData: MutableLiveData<BerkasResponse> = MutableLiveData()
+    val berkasRiwayatData: MutableLiveData<BerkasRiwayatResponse> = MutableLiveData()
 
     fun validateQRCode(result: String, callback: (String) -> Unit) {
         myPreferences = MySharedPreferences(appContext)
 
+        val idAdmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
+        val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
         if (result.contains("webapp")) {
-            val idAdmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
-            val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
             vibrate(appContext)
             loginWebApp(appContext, idAdmin, result, tokenAuth) { isSuccess ->
                 if (isSuccess) {
@@ -51,22 +52,16 @@ class ScanQrViewModel(application: Application) : ViewModel() {
             val matcher = regex.matcher(result)
             if (matcher.find()) {
                 vibrate(appContext)
-                callback(result)
+                getBerkas(idAdmin, result, tokenAuth)
+                getRiwayatBerkas(idAdmin, result, tokenAuth)
+                callback("berkas_url")
             } else {
                 callback("invalid_qr_code")
             }
         }
     }
 
-    fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
-//        val regex = Pattern.compile("https:\\/\\/bkd.jaylangkung.co.id\\/get_info_surat.php\\?nomor_berkas=(.*)")
-//        val matcher = regex.matcher(noSurat)
-//        return if (matcher.find()) {
-//            matcher.group(1)?.toString()
-//        } else {
-//            ""
-//        }
-
+    private fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
         RetrofitClient.apiService.getBerkas(idAdmin, url, tokenAuth).enqueue(object : Callback<BerkasResponse> {
             override fun onResponse(call: Call<BerkasResponse>, response: Response<BerkasResponse>) {
                 when (response.code()) {
@@ -82,20 +77,48 @@ class ScanQrViewModel(application: Application) : ViewModel() {
                     else -> {
                         val error = ErrorHandler().parseError(response.errorBody()!!.string())
                         Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
-                        ErrorHandler().responseHandler(appContext, "loginWebApp | onResponse", response.code().toString())
+                        ErrorHandler().responseHandler(appContext, "getBerkas | onResponse", response.code().toString())
                     }
                 }
             }
 
             override fun onFailure(call: Call<BerkasResponse>, t: Throwable) {
                 Toasty.error(appContext, t.message.toString(), Toasty.LENGTH_LONG).show()
-                ErrorHandler().responseHandler(appContext, "loginWebApp | onFailure", t.message.toString())
+                ErrorHandler().responseHandler(appContext, "getBerkas | onFailure", t.message.toString())
+            }
+        })
+    }
+
+    private fun getRiwayatBerkas(idAdmin: String, url: String, tokenAuth: String) {
+        RetrofitClient.apiService.getRiwayatBerkas(idAdmin, url, "", tokenAuth).enqueue(object : Callback<BerkasRiwayatResponse> {
+            override fun onResponse(call: Call<BerkasRiwayatResponse>, response: Response<BerkasRiwayatResponse>) {
+                when (response.code()) {
+                    200 -> {
+                        berkasRiwayatData.postValue(response.body())
+                    }
+
+                    400 -> {
+                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
+                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
+                    }
+
+                    else -> {
+                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
+                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
+                        ErrorHandler().responseHandler(appContext, "getRiwayatBerkas | onResponse", response.code().toString())
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<BerkasRiwayatResponse>, t: Throwable) {
+                Toasty.error(appContext, t.message.toString(), Toasty.LENGTH_LONG).show()
+                ErrorHandler().responseHandler(appContext, "getRiwayatBerkas | onFailure", t.message.toString())
             }
         })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun convertDate(rawDate: String) : String {
+    fun convertDate(rawDate: String): String {
         if (rawDate == "0000-00-00") return "-"
         val formatter = SimpleDateFormat("yyyy-MM-dd", appContext.resources.configuration.locales.get(0))
         val date = formatter.parse(rawDate)
