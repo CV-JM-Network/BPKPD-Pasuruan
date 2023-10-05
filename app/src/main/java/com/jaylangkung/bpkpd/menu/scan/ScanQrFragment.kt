@@ -30,7 +30,7 @@ class ScanQrFragment : Fragment() {
     ): View {
         _binding = FragmentScanQrBinding.inflate(inflater, container, false)
         val factory = ViewModelFactory.getInstance(requireActivity().application)
-        viewModel = ViewModelProvider(this, factory)[ScanQrViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), factory)[ScanQrViewModel::class.java]
 
         binding.apply {
             codeScanner = CodeScanner(requireContext(), scannerView).apply {
@@ -65,7 +65,9 @@ class ScanQrFragment : Fragment() {
                                 }
 
                                 else -> {
-                                    startActivity(Intent(requireContext(), ScanQrDetailActivity::class.java))
+                                    startActivity(Intent(requireContext(), ScanQrDetailActivity::class.java).putExtra(
+                                        "result", result
+                                    ))
                                     requireActivity().finish()
                                 }
                             }

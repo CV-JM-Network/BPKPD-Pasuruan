@@ -52,16 +52,14 @@ class ScanQrViewModel(application: Application) : ViewModel() {
             val matcher = regex.matcher(result)
             if (matcher.find()) {
                 vibrate(appContext)
-                getBerkas(idAdmin, result, tokenAuth)
-                getRiwayatBerkas(idAdmin, result, tokenAuth)
-                callback("berkas_url")
+                callback(result)
             } else {
                 callback("invalid_qr_code")
             }
         }
     }
 
-    private fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
+    fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
         RetrofitClient.apiService.getBerkas(idAdmin, url, tokenAuth).enqueue(object : Callback<BerkasResponse> {
             override fun onResponse(call: Call<BerkasResponse>, response: Response<BerkasResponse>) {
                 when (response.code()) {
@@ -89,7 +87,7 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         })
     }
 
-    private fun getRiwayatBerkas(idAdmin: String, url: String, tokenAuth: String) {
+    fun getRiwayatBerkas(idAdmin: String, url: String, tokenAuth: String) {
         RetrofitClient.apiService.getRiwayatBerkas(idAdmin, url, "", tokenAuth).enqueue(object : Callback<BerkasRiwayatResponse> {
             override fun onResponse(call: Call<BerkasRiwayatResponse>, response: Response<BerkasRiwayatResponse>) {
                 when (response.code()) {

@@ -20,6 +20,8 @@ import com.jaylangkung.bpkpd.databinding.BerkasPbbBinding
 import com.jaylangkung.bpkpd.databinding.BerkasPenagihanBinding
 import com.jaylangkung.bpkpd.databinding.BerkasSalinanBinding
 import com.jaylangkung.bpkpd.databinding.BerkasSknjopBinding
+import com.jaylangkung.bpkpd.utils.Constants
+import com.jaylangkung.bpkpd.utils.MySharedPreferences
 import com.jaylangkung.bpkpd.viewModel.ScanQrViewModel
 import com.jaylangkung.bpkpd.viewModel.ViewModelFactory
 
@@ -27,6 +29,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScanQrDetailBinding
     private lateinit var viewModel: ScanQrViewModel
+    private lateinit var myPreferences: MySharedPreferences
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +37,8 @@ class ScanQrDetailActivity : AppCompatActivity() {
         binding = ActivityScanQrDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val factory = ViewModelFactory.getInstance(application)
-        viewModel = ViewModelProvider(this, factory)[ScanQrViewModel::class.java]
+        viewModel = ViewModelProvider(this@ScanQrDetailActivity, factory)[ScanQrViewModel::class.java]
+        myPreferences = MySharedPreferences(this@ScanQrDetailActivity)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -49,8 +53,12 @@ class ScanQrDetailActivity : AppCompatActivity() {
             btnBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
-
+            val idAdmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
+            val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
+            val result = intent.getStringExtra("result").toString()
             viewModel.apply {
+                getBerkas(idAdmin, result, tokenAuth)
+                getRiwayatBerkas(idAdmin, result, tokenAuth)
                 berkasData.observe(this@ScanQrDetailActivity) { berkas ->
                     if (berkas != null) {
                         berkasRiwayatData.observe(this@ScanQrDetailActivity) { berkasRiwayat ->
