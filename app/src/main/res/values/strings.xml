@@ -53,4 +53,8 @@
     <string name="status_berkas_persen">%1$d%%</string>
     <string name="catatan">Catatan:</string>
     <string name="ditolak">Alasan Ditolak: %1$s</string>
+    <string name="riwayat_berkas">Riwayat Berkas</string>
+    <string name="icon_empty">icon data kosong</string>
+    <string name="nama_staff">Nama Staff: %1$s</string>
+    <string name="aksi_riwayat">Aksi: %1$s</string>
 </resources>

@@ -10,8 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
-import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
 import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
+import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
 import com.jaylangkung.bpkpd.retrofit.RetrofitClient
 import com.jaylangkung.bpkpd.utils.Constants
 import com.jaylangkung.bpkpd.utils.ErrorHandler
@@ -23,6 +23,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import java.util.regex.Pattern
 
 class ScanQrViewModel(application: Application) : ViewModel() {
@@ -64,6 +65,11 @@ class ScanQrViewModel(application: Application) : ViewModel() {
             override fun onResponse(call: Call<BerkasResponse>, response: Response<BerkasResponse>) {
                 when (response.code()) {
                     200 -> {
+                        for (i in response.body()!!.data.indices) {
+                            response.body()!!.data[i].namaWp = convertCamelCase(response.body()!!.data[i].namaWp)
+                            response.body()!!.data[i].desaKel = convertCamelCase(response.body()!!.data[i].desaKel)
+                            response.body()!!.data[i].kecamatan = convertCamelCase(response.body()!!.data[i].kecamatan)
+                        }
                         berkasData.postValue(response.body())
                     }
 
@@ -131,6 +137,14 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         } else {
             @Suppress("DEPRECATION") vibrator.vibrate(200)
         }
+    }
+
+    private fun convertCamelCase(str: String): String {
+        val words = str.split(" ").toMutableList()
+        for (i in words.indices) {
+            words[i] = words[i].lowercase(Locale.ROOT).replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        }
+        return words.joinToString(" ")
     }
 
     private fun loginWebApp(ctx: Context, idAdmin: String, deviceId: String, tokenAuth: String, callback: (Boolean) -> Unit) {

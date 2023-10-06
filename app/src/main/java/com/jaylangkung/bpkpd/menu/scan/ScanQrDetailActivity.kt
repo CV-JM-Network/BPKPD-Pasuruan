@@ -8,6 +8,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.dataClass.BerkasData
@@ -30,6 +32,10 @@ class ScanQrDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScanQrDetailBinding
     private lateinit var viewModel: ScanQrViewModel
     private lateinit var myPreferences: MySharedPreferences
+    private lateinit var adapter: BerkasRiwayatAdapter
+
+    private lateinit var berkas: BerkasData
+    private lateinit var berkasRiwayat: List<BerkasRiwayatData>
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +45,9 @@ class ScanQrDetailActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(application)
         viewModel = ViewModelProvider(this@ScanQrDetailActivity, factory)[ScanQrViewModel::class.java]
         myPreferences = MySharedPreferences(this@ScanQrDetailActivity)
+        adapter = BerkasRiwayatAdapter()
+        berkas = BerkasData()
+        berkasRiwayat = emptyList()
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -50,59 +59,73 @@ class ScanQrDetailActivity : AppCompatActivity() {
         })
 
         binding.apply {
-            btnBack.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
-            }
             val idAdmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
             val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
             val result = intent.getStringExtra("result").toString()
+
+            btnBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+
             viewModel.apply {
                 getBerkas(idAdmin, result, tokenAuth)
                 getRiwayatBerkas(idAdmin, result, tokenAuth)
+                var tabel = ""
+                var berkasIsLoaded = false
+                var berkasRiwayatIsLoaded = false
                 berkasData.observe(this@ScanQrDetailActivity) { berkas ->
                     if (berkas != null) {
-                        berkasRiwayatData.observe(this@ScanQrDetailActivity) { berkasRiwayat ->
-                            if (berkasRiwayat != null) {
-                                when (berkas.tabel) {
-                                    "penagihan" -> {
-                                        salinanView(berkas.data[0], berkasRiwayat.data)
-                                    }
-                                    "pbb" -> {
-                                        pbbView(berkas.data[0], berkasRiwayat.data)
-                                    }
+                        tabel = berkas.tabel
+                        this@ScanQrDetailActivity.berkas = berkas.data[0]
+                        berkasIsLoaded = true
 
-                                    "salinan" -> {
-                                        penagihanView(berkas.data[0], berkasRiwayat.data)
-                                    }
-
-                                    "sk_njop" -> {
-                                        sknjopView(berkas.data[0], berkasRiwayat.data)
-                                    }
-
-                                    "bphtb" -> {
-                                        bphtbView(berkas.data[0], berkasRiwayat.data)
-                                    }
-
-                                    "bphtb_kolektif" -> {
-                                        bphtbKolektifView(berkas.data[0], berkasRiwayat.data)
-                                    }
-
-                                    "npwpd" -> {
-                                        npwpdView(berkas.data[0], berkasRiwayat.data)
-                                    }
-
-                                    else -> tvTitle.text = getString(R.string.berkas_title, berkas.tabel)
-                                }
-                            }
+                        if (berkasIsLoaded && berkasRiwayatIsLoaded) {
+                            showLayout(tabel)
                         }
                     }
                 }
+                berkasRiwayatData.observe(this@ScanQrDetailActivity) { berkasRiwayat ->
+                    if (berkasRiwayat != null) {
+                        berkasRiwayat.data.sortedByDescending { it.idriwayatBerkas }
+                        this@ScanQrDetailActivity.berkasRiwayat = berkasRiwayat.data
+                        adapter.setItem(berkasRiwayat.data)
+                        adapter.notifyItemRangeChanged(0, berkasRiwayat.data.size)
+                        berkasRiwayatIsLoaded = true
+
+                        if (berkasIsLoaded && berkasRiwayatIsLoaded) {
+                            showLayout(tabel)
+                        }
+                    }
+                }
+
+
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun salinanView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun showLayout(tabel: String) {
+        when (tabel) {
+            "penagihan" -> salinanView(berkas)
+
+            "pbb" -> pbbView(berkas)
+
+            "salinan" -> penagihanView(berkas)
+
+            "sk_njop" -> sknjopView(berkas)
+
+            "bphtb" -> bphtbView(berkas)
+
+            "bphtb_kolektif" -> bphtbKolektifView(berkas)
+
+            "npwpd" -> npwpdView(berkas)
+
+            else -> binding.tvTitle.text = getString(R.string.berkas_title, tabel)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun salinanView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "Salinan")
             stubBerkas.layoutResource = R.layout.berkas_salinan
@@ -159,23 +182,36 @@ class ScanQrDetailActivity : AppCompatActivity() {
                     tvCatatan.visibility = View.VISIBLE
                     tvCatatan.text = data.keterangan
                 }
+
+                if (berkasRiwayat.isNotEmpty()) {
+                    rvBerkasRiwayat.apply {
+                        visibility = View.VISIBLE
+                        layoutManager = LinearLayoutManager(this@ScanQrDetailActivity)
+                        itemAnimator = DefaultItemAnimator()
+                        setHasFixedSize(true)
+                        adapter = this@ScanQrDetailActivity.adapter
+                    }
+                } else {
+                    rvBerkasRiwayat.visibility = View.GONE
+                    empty.visibility = View.VISIBLE
+                }
             }
         }
     }
 
-    private fun pbbView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun pbbView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "PBB")
             stubBerkas.layoutResource = R.layout.berkas_pbb
             val stubBinding = BerkasPbbBinding.bind(stubBerkas.inflate())
             stubBinding.apply {
-
+                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun penagihanView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun penagihanView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "Penagihan")
             stubBerkas.layoutResource = R.layout.berkas_penagihan
@@ -190,7 +226,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun sknjopView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun sknjopView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "SK NJOP")
             stubBerkas.layoutResource = R.layout.berkas_sknjop
@@ -202,7 +238,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun bphtbView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun bphtbView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "BPTHB")
             stubBerkas.layoutResource = R.layout.berkas_bphtb
@@ -214,7 +250,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun bphtbKolektifView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun bphtbKolektifView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "BPTHB Kolektif")
             stubBerkas.layoutResource = R.layout.berkas_bphtb_kolektif
@@ -226,7 +262,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun npwpdView(data: BerkasData, dataRiwayat: List<BerkasRiwayatData>) {
+    private fun npwpdView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "NPWPD")
             stubBerkas.layoutResource = R.layout.berkas_npwpd
