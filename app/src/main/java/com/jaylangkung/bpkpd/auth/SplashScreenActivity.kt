@@ -27,7 +27,6 @@ class SplashScreenActivity : AppCompatActivity() {
         val apiKey = BuildConfig.API_KEY
         myPreferences.setValue(Constants.TokenAuth, apiKey)
 
-
         Handler(Looper.getMainLooper()).postDelayed({
             //Ketika user sudah login tidak perlu ke halaman login lagi
             if (myPreferences.getValue(Constants.USER).equals(Constants.LOGIN)) {

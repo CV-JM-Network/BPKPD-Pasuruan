@@ -4,7 +4,6 @@ import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
 import com.jaylangkung.bpkpd.dataClass.LoginResponse
 import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
-import com.jaylangkung.bpkpd.dataClass.UpdateProfilResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -60,5 +59,5 @@ interface ApiService {
         @Part("telp") telp: RequestBody,
         @Part foto: MultipartBody.Part? = null,
         @Header("Authorization") authorization: String,
-    ): Call<UpdateProfilResponse>
+    ): Call<LoginResponse>
 }

@@ -17,11 +17,7 @@ import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatData
 import com.jaylangkung.bpkpd.databinding.ActivityScanQrDetailBinding
 import com.jaylangkung.bpkpd.databinding.BerkasBphtbBinding
 import com.jaylangkung.bpkpd.databinding.BerkasBphtbKolektifBinding
-import com.jaylangkung.bpkpd.databinding.BerkasNpwpdBinding
-import com.jaylangkung.bpkpd.databinding.BerkasPbbBinding
-import com.jaylangkung.bpkpd.databinding.BerkasPenagihanBinding
-import com.jaylangkung.bpkpd.databinding.BerkasSalinanBinding
-import com.jaylangkung.bpkpd.databinding.BerkasSknjopBinding
+import com.jaylangkung.bpkpd.databinding.BerkasDefaultBinding
 import com.jaylangkung.bpkpd.utils.Constants
 import com.jaylangkung.bpkpd.utils.MySharedPreferences
 import com.jaylangkung.bpkpd.viewModel.ScanQrViewModel
@@ -86,7 +82,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
                 }
                 berkasRiwayatData.observe(this@ScanQrDetailActivity) { berkasRiwayat ->
                     if (berkasRiwayat != null) {
-                        berkasRiwayat.data.sortedByDescending { it.idriwayatBerkas }
+                        berkasRiwayat.data.sortedBy { it.idriwayatBerkas }
                         this@ScanQrDetailActivity.berkasRiwayat = berkasRiwayat.data
                         adapter.setItem(berkasRiwayat.data)
                         adapter.notifyItemRangeChanged(0, berkasRiwayat.data.size)
@@ -106,30 +102,30 @@ class ScanQrDetailActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showLayout(tabel: String) {
         when (tabel) {
-            "penagihan" -> salinanView(berkas)
+            "penagihan" -> defaultView(berkas, "Salinan")
 
-            "pbb" -> pbbView(berkas)
+            "agenda" -> defaultView(berkas, "PBB")
 
-            "salinan" -> penagihanView(berkas)
+            "salinan" -> defaultView(berkas, "Penagihan")
 
-            "sk_njop" -> sknjopView(berkas)
+            "sk_njop" -> defaultView(berkas, "SK NJOP")
 
             "bphtb" -> bphtbView(berkas)
 
             "bphtb_kolektif" -> bphtbKolektifView(berkas)
 
-            "npwpd" -> npwpdView(berkas)
+            "npwpd" -> defaultView(berkas, "NPWPD")
 
-            else -> binding.tvTitle.text = getString(R.string.berkas_title, tabel)
+            else -> binding.tvTitle.text = getString(R.string.berkas_title, "Tidak Ditemukan")
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun salinanView(data: BerkasData) {
+    private fun defaultView(data: BerkasData, tabel: String) {
         binding.apply {
-            tvTitle.text = getString(R.string.berkas_title, "Salinan")
-            stubBerkas.layoutResource = R.layout.berkas_salinan
-            val stubBinding = BerkasSalinanBinding.bind(stubBerkas.inflate())
+            tvTitle.text = getString(R.string.berkas_title, tabel)
+            stubBerkas.layoutResource = R.layout.berkas_default
+            val stubBinding = BerkasDefaultBinding.bind(stubBerkas.inflate())
             val tglDiterima = viewModel.convertDate(data.tanggal)
             val tglSelesai = viewModel.convertDate(data.tanggalSelesai)
             stubBinding.apply {
@@ -199,45 +195,6 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun pbbView(data: BerkasData) {
-        binding.apply {
-            tvTitle.text = getString(R.string.berkas_title, "PBB")
-            stubBerkas.layoutResource = R.layout.berkas_pbb
-            val stubBinding = BerkasPbbBinding.bind(stubBerkas.inflate())
-            stubBinding.apply {
-                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
-            }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun penagihanView(data: BerkasData) {
-        binding.apply {
-            tvTitle.text = getString(R.string.berkas_title, "Penagihan")
-            stubBerkas.layoutResource = R.layout.berkas_penagihan
-            val stubBinding = BerkasPenagihanBinding.bind(stubBerkas.inflate())
-            val tglDiterima = viewModel.convertDate(data.tanggal)
-            val tglSelesai = viewModel.convertDate(data.tanggalSelesai)
-            stubBinding.apply {
-                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
-                tvTglDiterima.text = getString(R.string.tgl_diterima, tglDiterima)
-                tvTglSelesai.text = getString(R.string.tgl_selesai, tglSelesai)
-            }
-        }
-    }
-
-    private fun sknjopView(data: BerkasData) {
-        binding.apply {
-            tvTitle.text = getString(R.string.berkas_title, "SK NJOP")
-            stubBerkas.layoutResource = R.layout.berkas_sknjop
-            val stubBinding = BerkasSknjopBinding.bind(stubBerkas.inflate())
-            stubBinding.apply {
-                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
-
-            }
-        }
-    }
-
     private fun bphtbView(data: BerkasData) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, "BPTHB")
@@ -262,15 +219,4 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun npwpdView(data: BerkasData) {
-        binding.apply {
-            tvTitle.text = getString(R.string.berkas_title, "NPWPD")
-            stubBerkas.layoutResource = R.layout.berkas_npwpd
-            val stubBinding = BerkasNpwpdBinding.bind(stubBerkas.inflate())
-            stubBinding.apply {
-                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
-
-            }
-        }
-    }
 }

@@ -15,7 +15,6 @@ class HomeViewModel(application: Application) : ViewModel() {
 
     val userData: LiveData<UserData> = run {
         myPreferences = MySharedPreferences(appContext)
-        val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
         val liveData = MutableLiveData<UserData>()
         liveData.postValue(
             UserData(
@@ -27,8 +26,7 @@ class HomeViewModel(application: Application) : ViewModel() {
                 myPreferences.getValue(Constants.USER_FOTO).toString(),
                 myPreferences.getValue(Constants.USER_JUDUL).toString(),
                 myPreferences.getValue(Constants.USER_NAMA).toString(),
-                myPreferences.getValue(Constants.USER_TELP).toString(),
-                tokenAuth
+                myPreferences.getValue(Constants.USER_TELP).toString()
             )
         )
         liveData

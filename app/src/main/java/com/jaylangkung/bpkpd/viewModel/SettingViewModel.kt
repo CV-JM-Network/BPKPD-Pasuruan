@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jaylangkung.bpkpd.dataClass.UpdateProfilResponse
+import com.jaylangkung.bpkpd.dataClass.LoginResponse
 import com.jaylangkung.bpkpd.dataClass.UserData
 import com.jaylangkung.bpkpd.retrofit.RetrofitClient
 import com.jaylangkung.bpkpd.utils.Constants
@@ -25,7 +25,6 @@ class SettingViewModel(application: Application) : ViewModel() {
 
     val userData: LiveData<UserData> = run {
         myPreferences = MySharedPreferences(appContext)
-        val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
         val liveData = MutableLiveData<UserData>()
         liveData.postValue(
             UserData(
@@ -37,21 +36,22 @@ class SettingViewModel(application: Application) : ViewModel() {
                 myPreferences.getValue(Constants.USER_FOTO).toString(),
                 myPreferences.getValue(Constants.USER_JUDUL).toString(),
                 myPreferences.getValue(Constants.USER_NAMA).toString(),
-                myPreferences.getValue(Constants.USER_TELP).toString(),
-                tokenAuth
+                myPreferences.getValue(Constants.USER_TELP).toString()
             )
         )
         liveData
     }
 
     fun updateProfile(
-        idadmin: RequestBody, nama: RequestBody, alamat: RequestBody, telp: RequestBody, foto: MultipartBody.Part? = null, tokenAuth: String
+        idadmin: RequestBody, nama: RequestBody, alamat: RequestBody, telp: RequestBody, foto: MultipartBody.Part? = null
     ) {
+        myPreferences = MySharedPreferences(appContext)
+        val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
         RetrofitClient.apiService.updateProfile(
             idadmin, nama, alamat, telp, foto, tokenAuth
-        ).enqueue(object : Callback<UpdateProfilResponse> {
-            override fun onResponse(call: Call<UpdateProfilResponse>, response: Response<UpdateProfilResponse>) {
-                when(response.code()) {
+        ).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                when (response.code()) {
                     200 -> {
 //                        val data = response.body()?.data
 //                        if (data != null) {
@@ -70,7 +70,7 @@ class SettingViewModel(application: Application) : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<UpdateProfilResponse>, t: Throwable) {
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 ErrorHandler().responseHandler(appContext, "updateProfile | onFailure", t.message.toString())
             }
 

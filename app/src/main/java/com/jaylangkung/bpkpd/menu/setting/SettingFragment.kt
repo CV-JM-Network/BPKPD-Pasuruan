@@ -80,7 +80,6 @@ class SettingFragment : Fragment() {
                     val requestBodyPhoto = file?.asRequestBody(requireActivity().contentResolver.getType(it).toString().toMediaTypeOrNull())
                     img = requestBodyPhoto?.let { it1 -> MultipartBody.Part.createFormData("img", file.name, it1) }
                 }
-                val tokenAuth = viewModel.userData.value?.tokenAuth.toString()
 
                 Toasty.info(requireContext(), "Berhasil Update Profile", Toasty.LENGTH_SHORT).show()
                 btnSave.startAnimation()
