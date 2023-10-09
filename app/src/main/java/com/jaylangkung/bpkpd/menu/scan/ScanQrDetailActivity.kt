@@ -1,6 +1,7 @@
 package com.jaylangkung.bpkpd.menu.scan
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -172,6 +173,18 @@ class ScanQrDetailActivity : AppCompatActivity() {
                 tvNama.text = getString(R.string.nama_pemohon, data.namaWp)
                 tvAlamat.text = getString(R.string.alamat_pemohon, data.desaKel, data.kecamatan)
                 tvKontak.text = getString(R.string.kontak_pemohon, data.contactPerson)
+                if (data.contactPerson != "-") {
+                    tvKontak.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_whatsapp, 0)
+                    tvKontak.setOnClickListener {
+                        //remove 0 from phone number
+                        val phone = data.contactPerson.substring(1)
+                        val url =
+                            "https://wa.me/62$phone?text=Halo%20${data.namaWp},%20Data%20Anda%20telah%20selesai%20diproses.%20Silahkan%20mengambil%20berkas%20di%20Kantor%20BPKPD%20Kabupaten%20Sidoarjo.%20Terima%20Kasih."
+                        val i = Intent(Intent.ACTION_VIEW)
+                        i.data = Uri.parse(url)
+                        startActivity(i)
+                    }
+                }
                 tvJmlPermohonan.text = getString(R.string.jml_permohonan, data.jumlah)
                 if (data.keterangan.isNotEmpty()) {
                     txtCatatan.visibility = View.VISIBLE
