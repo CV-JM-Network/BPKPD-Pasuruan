@@ -1,15 +1,20 @@
 package com.jaylangkung.bpkpd.retrofit
 
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
+import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
 import com.jaylangkung.bpkpd.dataClass.LoginResponse
 import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
-import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
+import com.jaylangkung.bpkpd.dataClass.UpdateProfilResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -45,4 +50,15 @@ interface ApiService {
         @Field("device_id") deviceId: String,
         @Header("Authorization") authorization: String,
     ): Call<LoginWebappResponse>
+
+    @Multipart
+    @POST("admin/update/profile")
+    fun updateProfile(
+        @Part("idadmin") idadmin: RequestBody,
+        @Part("nama") nama: RequestBody,
+        @Part("alamat") alamat: RequestBody,
+        @Part("telp") telp: RequestBody,
+        @Part foto: MultipartBody.Part? = null,
+        @Header("Authorization") authorization: String,
+    ): Call<UpdateProfilResponse>
 }

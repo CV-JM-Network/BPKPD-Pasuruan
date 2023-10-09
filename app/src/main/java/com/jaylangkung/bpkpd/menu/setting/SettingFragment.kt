@@ -18,10 +18,14 @@ import com.jaylangkung.bpkpd.BuildConfig
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.auth.LoginActivity
 import com.jaylangkung.bpkpd.databinding.FragmentSettingBinding
+import com.jaylangkung.bpkpd.utils.FileUtils
 import com.jaylangkung.bpkpd.viewModel.SettingViewModel
 import com.jaylangkung.bpkpd.viewModel.ViewModelFactory
 import dev.shreyaspatil.MaterialDialog.MaterialDialog
 import es.dmoral.toasty.Toasty
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class SettingFragment : Fragment() {
     private var _binding: FragmentSettingBinding? = null
@@ -46,7 +50,6 @@ class SettingFragment : Fragment() {
                     .into(imgProfile)
 
                 tvValueNameEdit.setText(userData.nama)
-                tvValueEmailEdit.setText(userData.email)
                 tvValueAddressEdit.setText(userData.alamat)
                 tvValuePhoneEdit.setText(userData.telp)
             }
@@ -69,9 +72,14 @@ class SettingFragment : Fragment() {
             btnSave.setOnClickListener {
                 val idAdmin = viewModel.userData.value?.idadmin.toString()
                 val nama = tvValueNameEdit.text.toString()
-                val email = tvValueEmailEdit.text.toString()
                 val alamat = tvValueAddressEdit.text.toString()
                 val telp = tvValuePhoneEdit.text.toString()
+                var img: MultipartBody.Part? = null
+                viewModel.photoUri?.let {
+                    val file = FileUtils.getFile(requireContext(), it)
+                    val requestBodyPhoto = file?.asRequestBody(requireActivity().contentResolver.getType(it).toString().toMediaTypeOrNull())
+                    img = requestBodyPhoto?.let { it1 -> MultipartBody.Part.createFormData("img", file.name, it1) }
+                }
                 val tokenAuth = viewModel.userData.value?.tokenAuth.toString()
 
                 Toasty.info(requireContext(), "Berhasil Update Profile", Toasty.LENGTH_SHORT).show()

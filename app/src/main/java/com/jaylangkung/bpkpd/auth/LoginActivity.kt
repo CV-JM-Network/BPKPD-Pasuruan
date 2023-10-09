@@ -74,6 +74,7 @@ class LoginActivity : AppCompatActivity() {
         RetrofitClient.apiService.login(email, password, deviceID, tokenAuth).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 binding.btnLogin.endAnimation()
+                var errMsg = ""
                 when (response.code()) {
                     200 -> {
                         val data = response.body()!!.data
@@ -90,19 +91,17 @@ class LoginActivity : AppCompatActivity() {
                         finish()
                     }
 
-                    400, 401 -> {
-                        val msg = ErrorHandler().parseError(response.errorBody()!!.string())
-                        Toasty.error(this@LoginActivity, msg, Toasty.LENGTH_SHORT).show()
-                    }
-
                     500 -> {
-                        Toasty.error(this@LoginActivity, "Internal Server Error", Toasty.LENGTH_SHORT).show()
+                        errMsg = "Internal Server Error"
                     }
 
                     else -> {
-                        val msg = ErrorHandler().parseError(response.errorBody()!!.string())
-                        Toasty.error(this@LoginActivity, msg, Toasty.LENGTH_SHORT).show()
+                        errMsg = ErrorHandler().parseError(response.errorBody()!!.string())
                     }
+                }
+
+                if (errMsg.isNotEmpty()) {
+                    Toasty.error(this@LoginActivity, errMsg, Toasty.LENGTH_LONG).show()
                 }
             }
 

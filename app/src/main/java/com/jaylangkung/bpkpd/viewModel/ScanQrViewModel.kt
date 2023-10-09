@@ -63,6 +63,7 @@ class ScanQrViewModel(application: Application) : ViewModel() {
     fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
         RetrofitClient.apiService.getBerkas(idAdmin, url, tokenAuth).enqueue(object : Callback<BerkasResponse> {
             override fun onResponse(call: Call<BerkasResponse>, response: Response<BerkasResponse>) {
+                var errMsg = ""
                 when (response.code()) {
                     200 -> {
                         for (i in response.body()!!.data.indices) {
@@ -73,16 +74,13 @@ class ScanQrViewModel(application: Application) : ViewModel() {
                         berkasData.postValue(response.body())
                     }
 
-                    400 -> {
-                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
-                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
-                    }
-
                     else -> {
-                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
-                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
-                        ErrorHandler().responseHandler(appContext, "getBerkas | onResponse", response.code().toString())
+                        errMsg = ErrorHandler().parseError(response.errorBody()!!.string())
                     }
+                }
+
+                if (errMsg.isNotEmpty()) {
+                    ErrorHandler().responseHandler(appContext, "getBerkas | onResponse", errMsg)
                 }
             }
 
@@ -96,26 +94,23 @@ class ScanQrViewModel(application: Application) : ViewModel() {
     fun getRiwayatBerkas(idAdmin: String, url: String, tokenAuth: String) {
         RetrofitClient.apiService.getRiwayatBerkas(idAdmin, url, "", tokenAuth).enqueue(object : Callback<BerkasRiwayatResponse> {
             override fun onResponse(call: Call<BerkasRiwayatResponse>, response: Response<BerkasRiwayatResponse>) {
+                var errMsg = ""
                 when (response.code()) {
                     200 -> {
                         berkasRiwayatData.postValue(response.body())
                     }
 
-                    400 -> {
-                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
-                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
-                    }
-
                     else -> {
-                        val error = ErrorHandler().parseError(response.errorBody()!!.string())
-                        Toasty.error(appContext, error, Toasty.LENGTH_LONG).show()
-                        ErrorHandler().responseHandler(appContext, "getRiwayatBerkas | onResponse", response.code().toString())
+                        errMsg = ErrorHandler().parseError(response.errorBody()!!.string())
                     }
+                }
+
+                if (errMsg.isNotEmpty()) {
+                    ErrorHandler().responseHandler(appContext, "getRiwayatBerkas | onResponse", errMsg)
                 }
             }
 
             override fun onFailure(call: Call<BerkasRiwayatResponse>, t: Throwable) {
-                Toasty.error(appContext, t.message.toString(), Toasty.LENGTH_LONG).show()
                 ErrorHandler().responseHandler(appContext, "getRiwayatBerkas | onFailure", t.message.toString())
             }
         })

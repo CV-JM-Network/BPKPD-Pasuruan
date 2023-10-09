@@ -5,9 +5,17 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jaylangkung.bpkpd.dataClass.UpdateProfilResponse
 import com.jaylangkung.bpkpd.dataClass.UserData
+import com.jaylangkung.bpkpd.retrofit.RetrofitClient
 import com.jaylangkung.bpkpd.utils.Constants
+import com.jaylangkung.bpkpd.utils.ErrorHandler
 import com.jaylangkung.bpkpd.utils.MySharedPreferences
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SettingViewModel(application: Application) : ViewModel() {
 
@@ -34,6 +42,40 @@ class SettingViewModel(application: Application) : ViewModel() {
             )
         )
         liveData
+    }
+
+    fun updateProfile(
+        idadmin: RequestBody, nama: RequestBody, alamat: RequestBody, telp: RequestBody, foto: MultipartBody.Part? = null, tokenAuth: String
+    ) {
+        RetrofitClient.apiService.updateProfile(
+            idadmin, nama, alamat, telp, foto, tokenAuth
+        ).enqueue(object : Callback<UpdateProfilResponse> {
+            override fun onResponse(call: Call<UpdateProfilResponse>, response: Response<UpdateProfilResponse>) {
+                when(response.code()) {
+                    200 -> {
+//                        val data = response.body()?.data
+//                        if (data != null) {
+//                            myPreferences.setValue(Constants.USER_ALAMAT, data.alamat)
+//                            myPreferences.setValue(Constants.USER_EMAIL, data.email)
+//                            myPreferences.setValue(Constants.USER_FOTO, data.foto)
+//                            myPreferences.setValue(Constants.USER_JUDUL, data.judul)
+//                            myPreferences.setValue(Constants.USER_NAMA, data.nama)
+//                            myPreferences.setValue(Constants.USER_TELP, data.telp)
+//                        }
+                    }
+
+                    400 -> {
+                        ErrorHandler().responseHandler(appContext, "updateProfile | onResponse", response.message())
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateProfilResponse>, t: Throwable) {
+                ErrorHandler().responseHandler(appContext, "updateProfile | onFailure", t.message.toString())
+            }
+
+        })
+
     }
 
 
