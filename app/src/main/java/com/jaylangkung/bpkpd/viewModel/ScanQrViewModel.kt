@@ -90,7 +90,6 @@ class ScanQrViewModel(application: Application) : ViewModel() {
             }
 
             override fun onFailure(call: Call<BerkasResponse>, t: Throwable) {
-                Toasty.error(appContext, t.message.toString(), Toasty.LENGTH_LONG).show()
                 ErrorHandler().responseHandler(appContext, "getBerkas | onFailure", t.message.toString())
             }
         })

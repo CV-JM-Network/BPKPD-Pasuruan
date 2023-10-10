@@ -60,4 +60,13 @@ interface ApiService {
         @Part foto: MultipartBody.Part? = null,
         @Header("Authorization") authorization: String,
     ): Call<LoginResponse>
+
+    @GET("get/data/berkas")
+    fun getDataBerkas(
+        @Query("data_tabel") tabel: String,
+        @Query("limit") limit: Int,
+        @Query("current_page") page: Int,
+        @Header("Authorization") authorization: String,
+    ): Call<BerkasResponse>
+
 }
