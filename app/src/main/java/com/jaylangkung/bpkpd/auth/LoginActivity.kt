@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.jaylangkung.bpkpd.BuildConfig
 import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.dataClass.LoginResponse
@@ -30,6 +32,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         myPreferences = MySharedPreferences(this@LoginActivity)
 
+        val apiKey = BuildConfig.API_KEY
+        myPreferences.setValue(Constants.TokenAuth, apiKey)
         val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
         val deviceID = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
 
