@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.jaylangkung.bpkpd.BuildConfig
+import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.auth.LoginActivity
 import com.jaylangkung.bpkpd.databinding.FragmentSettingBinding
@@ -26,6 +27,7 @@ import es.dmoral.toasty.Toasty
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class SettingFragment : Fragment() {
     private var _binding: FragmentSettingBinding? = null
@@ -80,8 +82,20 @@ class SettingFragment : Fragment() {
                     val requestBodyPhoto = file?.asRequestBody(requireActivity().contentResolver.getType(it).toString().toMediaTypeOrNull())
                     img = requestBodyPhoto?.let { it1 -> MultipartBody.Part.createFormData("img", file.name, it1) }
                 }
-
-                Toasty.info(requireContext(), "Berhasil Update Profile", Toasty.LENGTH_SHORT).show()
+                viewModel.updateProfile(
+                    idAdmin.toRequestBody(MultipartBody.FORM),
+                    nama.toRequestBody(MultipartBody.FORM),
+                    alamat.toRequestBody(MultipartBody.FORM),
+                    telp.toRequestBody(MultipartBody.FORM),
+                    img
+                ) { result ->
+                    if (result) {
+                        Toasty.success(requireContext(), "Berhasil Update Profile", Toasty.LENGTH_SHORT).show()
+                    } else {
+                        Toasty.error(requireContext(), "Gagal Update Profile", Toasty.LENGTH_SHORT).show()
+                    }
+                    btnSave.endAnimation()
+                }
                 btnSave.startAnimation()
             }
 

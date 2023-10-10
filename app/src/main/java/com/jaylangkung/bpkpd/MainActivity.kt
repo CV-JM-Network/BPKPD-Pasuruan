@@ -54,10 +54,12 @@ class MainActivity : AppCompatActivity() {
                         loadFragment(HomeFragment())
                         bottomBar.selectTabById(R.id.nav_home, true)
                     }
+
                     "scan" -> {
                         loadFragment(ScanQrFragment())
                         bottomBar.selectTabById(R.id.nav_scan_qr, true)
                     }
+
                     "setting" -> {
                         loadFragment(SettingFragment())
                         bottomBar.selectTabById(R.id.nav_settings, true)

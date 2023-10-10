@@ -43,7 +43,7 @@ class SettingViewModel(application: Application) : ViewModel() {
     }
 
     fun updateProfile(
-        idadmin: RequestBody, nama: RequestBody, alamat: RequestBody, telp: RequestBody, foto: MultipartBody.Part? = null
+        idadmin: RequestBody, nama: RequestBody, alamat: RequestBody, telp: RequestBody, foto: MultipartBody.Part? = null, callback: (Boolean) -> Unit
     ) {
         myPreferences = MySharedPreferences(appContext)
         val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
@@ -51,27 +51,35 @@ class SettingViewModel(application: Application) : ViewModel() {
             idadmin, nama, alamat, telp, foto, tokenAuth
         ).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                var errMsg = ""
                 when (response.code()) {
                     200 -> {
-//                        val data = response.body()?.data
-//                        if (data != null) {
-//                            myPreferences.setValue(Constants.USER_ALAMAT, data.alamat)
-//                            myPreferences.setValue(Constants.USER_EMAIL, data.email)
-//                            myPreferences.setValue(Constants.USER_FOTO, data.foto)
-//                            myPreferences.setValue(Constants.USER_JUDUL, data.judul)
-//                            myPreferences.setValue(Constants.USER_NAMA, data.nama)
-//                            myPreferences.setValue(Constants.USER_TELP, data.telp)
-//                        }
+                        val data = response.body()?.data
+                        if (data != null) {
+                            myPreferences.setValue(Constants.USER_ALAMAT, data.alamat)
+                            myPreferences.setValue(Constants.USER_EMAIL, data.email)
+                            myPreferences.setValue(Constants.USER_FOTO, data.img)
+                            myPreferences.setValue(Constants.USER_JUDUL, data.judul)
+                            myPreferences.setValue(Constants.USER_NAMA, data.nama)
+                            myPreferences.setValue(Constants.USER_TELP, data.telp)
+                        }
+                        callback(true)
                     }
 
-                    400 -> {
-                        ErrorHandler().responseHandler(appContext, "updateProfile | onResponse", response.message())
+                    else -> {
+                        errMsg = ErrorHandler().parseError(response.errorBody()!!.string())
                     }
+                }
+
+                if (errMsg.isNotEmpty()) {
+                    ErrorHandler().responseHandler(appContext, "updateProfile | onResponse", errMsg)
+                    callback(false)
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 ErrorHandler().responseHandler(appContext, "updateProfile | onFailure", t.message.toString())
+                callback(false)
             }
 
         })
