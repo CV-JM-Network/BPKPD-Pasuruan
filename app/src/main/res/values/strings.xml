@@ -48,7 +48,7 @@
     <string name="alamat_pemohon">Alamat: %1$s, %2$s</string>
     <string name="kontak_pemohon">CP: %1$s</string>
     <string name="permohonan">Permohonan: %1$s</string>
-    <string name="jml_permohonan">jml: %1$d</string>
+    <string name="jml_permohonan">jumlah: %1$d</string>
     <string name="status_berkas">Status: %1$s</string>
     <string name="status_berkas_persen">%1$d%%</string>
     <string name="catatan">Catatan:</string>
@@ -57,4 +57,14 @@
     <string name="icon_empty">icon data kosong</string>
     <string name="nama_staff">Nama Staff: %1$s</string>
     <string name="aksi_riwayat">Aksi: %1$s</string>
+    <string name="nomor_sspd">SSPD: %1$s Th. %2$s</string>
+    <string name="txt_informasi_transaksi">Informasi Transaksi</string>
+    <string name="notaris">Notaris: %1$s</string>
+    <string name="harga">Harga: Rp %1$s</string>
+    <string name="nominal_bphtb">BPHTB: Rp %1$s</string>
+    <string name="pembeli">Pembeli: %1$s</string>
+    <string name="penjual">Penjual: %1$s</string>
+    <string name="pengurangan">Pengurangan: %1$s</string>
+    <string name="jenis_pengurangan">Jenis: %1$s</string>
+    <string name="pengajuan">Pengajuan: %1$s</string>
 </resources>

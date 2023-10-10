@@ -62,11 +62,15 @@ class ScanQrViewModel(application: Application) : ViewModel() {
 
     fun getBerkas(idAdmin: String, url: String, tokenAuth: String) {
         RetrofitClient.apiService.getBerkas(idAdmin, url, tokenAuth).enqueue(object : Callback<BerkasResponse> {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(call: Call<BerkasResponse>, response: Response<BerkasResponse>) {
                 var errMsg = ""
                 when (response.code()) {
                     200 -> {
                         for (i in response.body()!!.data.indices) {
+                            response.body()!!.data[i].tanggal = convertDate(response.body()!!.data[i].tanggal)
+                            response.body()!!.data[i].tanggalSelesai = convertDate(response.body()!!.data[i].tanggalSelesai)
+                            response.body()!!.data[i].createddate = convertDate(response.body()!!.data[i].createddate)
                             response.body()!!.data[i].namaWp = convertCamelCase(response.body()!!.data[i].namaWp)
                             response.body()!!.data[i].desaKel = convertCamelCase(response.body()!!.data[i].desaKel)
                             response.body()!!.data[i].kecamatan = convertCamelCase(response.body()!!.data[i].kecamatan)
@@ -118,8 +122,8 @@ class ScanQrViewModel(application: Application) : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun convertDate(rawDate: String): String {
-        if (rawDate == "0000-00-00") return "-"
+    private fun convertDate(rawDate: String): String {
+        if (rawDate == "0000-00-00" || rawDate == "0000-00-00 00:00:00") return "-"
         val formatter = SimpleDateFormat("yyyy-MM-dd", appContext.resources.configuration.locales.get(0))
         val date = formatter.parse(rawDate)
         val newFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", appContext.resources.configuration.locales.get(0))

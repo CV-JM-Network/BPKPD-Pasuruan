@@ -2,11 +2,9 @@ package com.jaylangkung.bpkpd.menu.scan
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -34,7 +32,6 @@ class ScanQrDetailActivity : AppCompatActivity() {
     private lateinit var berkas: BerkasData
     private lateinit var berkasRiwayat: List<BerkasRiwayatData>
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScanQrDetailBinding.inflate(layoutInflater)
@@ -100,7 +97,6 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showLayout(tabel: String) {
         when (tabel) {
             "penagihan" -> defaultView(berkas, "Salinan")
@@ -121,14 +117,13 @@ class ScanQrDetailActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun defaultView(data: BerkasData, tabel: String) {
         binding.apply {
             tvTitle.text = getString(R.string.berkas_title, tabel)
             stubBerkas.layoutResource = R.layout.berkas_default
             val stubBinding = BerkasDefaultBinding.bind(stubBerkas.inflate())
-            val tglDiterima = viewModel.convertDate(data.tanggal)
-            val tglSelesai = viewModel.convertDate(data.tanggalSelesai)
+            val tglDiterima = data.tanggal
+            val tglSelesai = data.tanggalSelesai
             stubBinding.apply {
                 tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
                 tvPermohonan.text = getString(R.string.permohonan, data.permohonan)
@@ -167,7 +162,11 @@ class ScanQrDetailActivity : AppCompatActivity() {
                         tvDitolak.text = getString(R.string.ditolak, data.berkasDitolak)
                     }
 
-                    else -> tvStatusBerkas.text = getString(R.string.status_berkas, "Masuk")
+                    else -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Tidak Diketahui")
+                        statusBerkasProgressBar.progress = 0
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 0)
+                    }
                 }
 
                 tvNama.text = getString(R.string.nama_pemohon, data.namaWp)
@@ -191,7 +190,6 @@ class ScanQrDetailActivity : AppCompatActivity() {
                     tvCatatan.visibility = View.VISIBLE
                     tvCatatan.text = data.keterangan
                 }
-
                 if (berkasRiwayat.isNotEmpty()) {
                     rvBerkasRiwayat.apply {
                         visibility = View.VISIBLE
@@ -213,9 +211,78 @@ class ScanQrDetailActivity : AppCompatActivity() {
             tvTitle.text = getString(R.string.berkas_title, "BPTHB")
             stubBerkas.layoutResource = R.layout.berkas_bphtb
             val stubBinding = BerkasBphtbBinding.bind(stubBerkas.inflate())
+            val tglDiterima = data.createddate
+            val tglSelesai = data.tanggalSelesai
             stubBinding.apply {
-                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
+                tvNomorSspd.text = getString(R.string.nomor_sspd, data.sspd, data.tahun)
+                tvTglDiterima.text = getString(R.string.tgl_diterima, tglDiterima)
+                tvTglSelesai.text = getString(R.string.tgl_selesai, tglSelesai)
+                when (data.prosesBerkas) {
+                    "masuk" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Masuk")
+                        statusBerkasProgressBar.progress = 0
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 0)
+                    }
 
+                    "dalam proses" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Dalam Proses")
+                        statusBerkasProgressBar.progress = 50
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 50)
+                    }
+
+                    "kurang lengkap" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Kurang Lengkap")
+                        statusBerkasProgressBar.progress = 75
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 75)
+                    }
+
+                    "selesai" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Selesai")
+                        statusBerkasProgressBar.progress = 100
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 100)
+                    }
+
+                    "ditolak" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Ditolak")
+                        statusBerkasProgressBar.progress = 100
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 100)
+                        tvDitolak.visibility = View.VISIBLE
+                        tvDitolak.text = getString(R.string.ditolak, data.berkasDitolak)
+                    }
+
+                    else -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Tidak Diketahui")
+                        statusBerkasProgressBar.progress = 0
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 0)
+                    }
+                }
+
+                tvNotaris.text = getString(R.string.notaris, data.notaris)
+                tvNamaPembeli.text = getString(R.string.pembeli, data.pembeli)
+                tvNamaPenjual.text = getString(R.string.penjual, data.penjual)
+                tvHarga.text = getString(R.string.harga, data.hargaTransaksi)
+                tvBphtb.text = getString(R.string.nominal_bphtb, data.bphtb)
+                tvPengurangan.text = getString(R.string.pengurangan, data.pengurangan)
+                tvJenisPengurangan.text = getString(R.string.jenis_pengurangan, data.jenisPengurangan)
+                tvKontak.text = getString(R.string.kontak_pemohon, data.contactPerson)
+                tvJmlPermohonan.text = getString(R.string.jml_permohonan, data.jumlahBerkas)
+                if (data.keterangan.isNotEmpty()) {
+                    txtCatatan.visibility = View.VISIBLE
+                    tvCatatan.visibility = View.VISIBLE
+                    tvCatatan.text = data.keterangan
+                }
+                if (berkasRiwayat.isNotEmpty()) {
+                    rvBerkasRiwayat.apply {
+                        visibility = View.VISIBLE
+                        layoutManager = LinearLayoutManager(this@ScanQrDetailActivity)
+                        itemAnimator = DefaultItemAnimator()
+                        setHasFixedSize(true)
+                        adapter = this@ScanQrDetailActivity.adapter
+                    }
+                } else {
+                    rvBerkasRiwayat.visibility = View.GONE
+                    empty.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -225,9 +292,69 @@ class ScanQrDetailActivity : AppCompatActivity() {
             tvTitle.text = getString(R.string.berkas_title, "BPTHB Kolektif")
             stubBerkas.layoutResource = R.layout.berkas_bphtb_kolektif
             val stubBinding = BerkasBphtbKolektifBinding.bind(stubBerkas.inflate())
+            val tglDiterima = data.createddate
+            val tglSelesai = data.tanggalSelesai
             stubBinding.apply {
-                tvNomorBerkas.text = getString(R.string.nomor_berkas, data.noPly, data.tahun)
+                val tahun = data.createddate.substring(6, 10)
+                tvNomorSspd.text = getString(R.string.nomor_sspd, data.sspd, tahun)
+                tvPengajuan.text = getString(R.string.pengajuan, data.pengajuan)
+                tvTglDiterima.text = getString(R.string.tgl_diterima, tglDiterima)
+                tvTglSelesai.text = getString(R.string.tgl_selesai, tglSelesai)
+                when (data.prosesBerkas) {
+                    "masuk" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Masuk")
+                        statusBerkasProgressBar.progress = 0
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 0)
+                    }
 
+                    "dalam proses" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Dalam Proses")
+                        statusBerkasProgressBar.progress = 50
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 50)
+                    }
+
+                    "kurang lengkap" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Kurang Lengkap")
+                        statusBerkasProgressBar.progress = 75
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 75)
+                    }
+
+                    "selesai" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Selesai")
+                        statusBerkasProgressBar.progress = 100
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 100)
+                    }
+
+                    "ditolak" -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Ditolak")
+                        statusBerkasProgressBar.progress = 100
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 100)
+                        tvDitolak.visibility = View.VISIBLE
+                        tvDitolak.text = getString(R.string.ditolak, data.berkasDitolak)
+                    }
+
+                    else -> {
+                        tvStatusBerkas.text = getString(R.string.status_berkas, "Tidak Diketahui")
+                        statusBerkasProgressBar.progress = 0
+                        tvStatusBerkasPersen.text = getString(R.string.status_berkas_persen, 0)
+                    }
+                }
+
+                tvNotaris.text = getString(R.string.notaris, data.notaris)
+                tvKontak.text = getString(R.string.kontak_pemohon, data.contactPerson)
+                tvJmlPermohonan.text = getString(R.string.jml_permohonan, data.jumlah)
+                if (berkasRiwayat.isNotEmpty()) {
+                    rvBerkasRiwayat.apply {
+                        visibility = View.VISIBLE
+                        layoutManager = LinearLayoutManager(this@ScanQrDetailActivity)
+                        itemAnimator = DefaultItemAnimator()
+                        setHasFixedSize(true)
+                        adapter = this@ScanQrDetailActivity.adapter
+                    }
+                } else {
+                    rvBerkasRiwayat.visibility = View.GONE
+                    empty.visibility = View.VISIBLE
+                }
             }
         }
     }
