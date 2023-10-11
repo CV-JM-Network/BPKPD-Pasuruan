@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jaylangkung.bpkpd.dataClass.BerkasData
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
 import com.jaylangkung.bpkpd.dataClass.UserData
@@ -17,7 +18,8 @@ class HomeViewModel(application: Application) : ViewModel() {
     private val appContext: Application = application
     private lateinit var myPreferences: MySharedPreferences
 
-    val berkasData: MutableLiveData<BerkasResponse> = MutableLiveData()
+    val berkasData: MutableLiveData<List<BerkasData>> = MutableLiveData()
+    var totalData: Int = 0
     val berkasRiwayatData: MutableLiveData<BerkasRiwayatResponse> = MutableLiveData()
 
     val userData: LiveData<UserData> = run {
@@ -47,7 +49,11 @@ class HomeViewModel(application: Application) : ViewModel() {
             override fun onResponse(call: retrofit2.Call<BerkasResponse>, response: retrofit2.Response<BerkasResponse>) {
                 when (response.code()) {
                     200 -> {
-                        berkasData.postValue(response.body())
+                        totalData = response.body()?.totalData ?: 0
+                        var tempData = berkasData.value ?: listOf()
+//                        tempData = tempData + response.body()?.data!!
+//                        berkasData.postValue(tempData)
+                        berkasData.postValue(response.body()?.data)
                     }
 
                     else -> errMsg = ErrorHandler().parseError(response.errorBody()!!.string())

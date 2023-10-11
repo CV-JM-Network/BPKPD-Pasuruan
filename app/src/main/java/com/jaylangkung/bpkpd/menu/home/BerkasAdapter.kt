@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jaylangkung.bpkpd.dataClass.BerkasData
-import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.databinding.ItemBerkasBinding
 
 class BerkasAdapter : RecyclerView.Adapter<BerkasAdapter.ItemHolder>() {
@@ -12,9 +11,9 @@ class BerkasAdapter : RecyclerView.Adapter<BerkasAdapter.ItemHolder>() {
     private var list = ArrayList<BerkasData>()
     fun setItem(item: List<BerkasData>?) {
         if (item == null) return
-        this.list.clear()
+        val prevSize = list.size
         this.list.addAll(item)
-        notifyItemRangeChanged(0, list.size)
+        notifyItemRangeChanged(prevSize, item.size)
     }
 
     class ItemHolder(private val binding: ItemBerkasBinding) : RecyclerView.ViewHolder(binding.root) {
