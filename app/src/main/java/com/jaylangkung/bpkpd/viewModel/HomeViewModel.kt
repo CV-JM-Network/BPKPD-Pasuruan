@@ -50,9 +50,6 @@ class HomeViewModel(application: Application) : ViewModel() {
                 when (response.code()) {
                     200 -> {
                         totalData = response.body()?.totalData ?: 0
-                        var tempData = berkasData.value ?: listOf()
-//                        tempData = tempData + response.body()?.data!!
-//                        berkasData.postValue(tempData)
                         berkasData.postValue(response.body()?.data)
                     }
 

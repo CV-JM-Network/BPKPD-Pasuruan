@@ -1,20 +1,18 @@
 package com.jaylangkung.bpkpd.menu.home
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jaylangkung.bpkpd.MainActivity
+import com.jaylangkung.bpkpd.dataClass.BerkasData
 import com.jaylangkung.bpkpd.databinding.ActivityBerkasDetailBinding
 import com.jaylangkung.bpkpd.utils.MySharedPreferences
 import com.jaylangkung.bpkpd.viewModel.HomeViewModel
 import com.jaylangkung.bpkpd.viewModel.ViewModelFactory
-import es.dmoral.toasty.Toasty
 
 class BerkasDetailActivity : AppCompatActivity() {
 
@@ -26,6 +24,8 @@ class BerkasDetailActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_TABEL = "extra_tabel"
     }
+
+    private var tempBerkasData = listOf<BerkasData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +39,7 @@ class BerkasDetailActivity : AppCompatActivity() {
         val tabel = intent.getStringExtra(EXTRA_TABEL).toString()
         var page = 1
         val limit = 10
+
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 startActivity(
@@ -55,37 +56,37 @@ class BerkasDetailActivity : AppCompatActivity() {
             }
 
             viewModel.apply {
-                getDataBerkas(tabel, limit, page)
+                getDataBerkas(tabel, 10, 1)
                 berkasData.observe(this@BerkasDetailActivity) { berkas ->
                     if (berkas != null) {
-                        adapter.setItem(berkas)
-                        rvBerkas.apply {
-//                            scrollToPosition(this@BerkasDetailActivity.adapter.itemCount - 1)
-                            layoutManager = LinearLayoutManager(this@BerkasDetailActivity)
-                            setHasFixedSize(false)
-                            adapter = this@BerkasDetailActivity.adapter
-                            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                                    super.onScrolled(recyclerView, dx, dy)
-                                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                                    val lastPosition = layoutManager.findLastVisibleItemPosition()
-                                    var totalPage = totalData / limit
-                                    totalPage += if (totalData % limit > 0) 1 else 0
-                                    if (lastPosition == this@BerkasDetailActivity.adapter.itemCount - 1) {
-                                        if (page < totalPage) {
-                                            page += 1
-                                            getDataBerkas(tabel, limit, page)
-                                        }
-                                    }
-                                }
-                            })
-                        }
+                        tempBerkasData = berkas
+                        adapter.setItem(tempBerkasData)
                     } else {
                         adapter.setItem(emptyList())
                     }
                 }
 
+                rvBerkas.apply {
+                    layoutManager = LinearLayoutManager(this@BerkasDetailActivity)
+                    setHasFixedSize(false)
+                    adapter = this@BerkasDetailActivity.adapter
+                    addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                            val lastPosition = layoutManager.findLastVisibleItemPosition()
+                            var totalPage = viewModel.totalData / limit
+                            totalPage += if (viewModel.totalData % limit > 0) 1 else 0
+                            if (lastPosition == this@BerkasDetailActivity.adapter.itemCount - 1) {
+                                if (page < totalPage) {
+                                    page += 1
+                                    viewModel.getDataBerkas(tabel, limit, page)
+                                }
+                            }
+                        }
+                    })
+                }
             }
         }
     }
+
 }
