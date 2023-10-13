@@ -51,8 +51,18 @@ class BerkasDetailActivity : AppCompatActivity() {
 
         binding.apply {
             btnBack.setOnClickListener {
-//                onBackPressedDispatcher.onBackPressed()
-                rvBerkas.scrollToPosition(adapter.itemCount - 1)
+                onBackPressedDispatcher.onBackPressed()
+            }
+
+            tvTitle.text = when (tabel) {
+                "salinan" -> "Berkas Salinan"
+                "pbb" -> "Berkas PBB"
+                "penagihan" -> "Berkas Penagihan"
+                "sk_njop" -> "Berkas SK NJOP"
+                "bphtb" -> "Berkas BPHTB"
+                "bphtb_kolektif" -> "Berkas BPHTB Kolektif"
+                "npwpd" -> "Berkas NPWPD"
+                else -> "Berkas"
             }
 
             viewModel.apply {
@@ -60,9 +70,9 @@ class BerkasDetailActivity : AppCompatActivity() {
                 berkasData.observe(this@BerkasDetailActivity) { berkas ->
                     if (berkas != null) {
                         tempBerkasData = berkas
-                        adapter.setItem(tempBerkasData)
+                        adapter.setItem(tempBerkasData, tabel)
                     } else {
-                        adapter.setItem(emptyList())
+                        adapter.setItem(emptyList(), tabel)
                     }
                 }
 

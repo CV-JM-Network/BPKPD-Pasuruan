@@ -57,27 +57,33 @@ class HomeFragment : Fragment() {
             }
 
             btnPbb.setOnClickListener {
-                Toasty.info(requireContext(), "PBB", Toasty.LENGTH_SHORT).show()
+                activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "pbb"))
+                activity?.finish()
             }
 
             btnSkNjop.setOnClickListener {
-                Toasty.info(requireContext(), "SK NJOP", Toasty.LENGTH_SHORT).show()
+                activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "sk_njop"))
+                activity?.finish()
             }
 
             btnBphtb.setOnClickListener {
-                Toasty.info(requireContext(), "BPHTB", Toasty.LENGTH_SHORT).show()
+                activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "bphtb"))
+                activity?.finish()
             }
 
             btnPenagihan.setOnClickListener {
-                Toasty.info(requireContext(), "Penagihan", Toasty.LENGTH_SHORT).show()
+                activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "penagihan"))
+                activity?.finish()
             }
 
             btnBphtbKolektif.setOnClickListener {
-                Toasty.info(requireContext(), "BPHTB Kolektif", Toasty.LENGTH_SHORT).show()
+                activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "bphtb_kolektif"))
+                activity?.finish()
             }
 
             btnNpwpd.setOnClickListener {
-                Toasty.info(requireContext(), "NPWPD", Toasty.LENGTH_SHORT).show()
+                activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "npwpd"))
+                activity?.finish()
             }
         }
 
