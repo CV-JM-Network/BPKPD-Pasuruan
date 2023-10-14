@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.jaylangkung.bpkpd.BuildConfig
 import com.jaylangkung.bpkpd.MainActivity

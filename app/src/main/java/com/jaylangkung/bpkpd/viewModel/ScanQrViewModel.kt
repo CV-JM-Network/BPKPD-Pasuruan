@@ -121,12 +121,12 @@ class ScanQrViewModel(application: Application) : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertDate(rawDate: String): String {
-        if (rawDate == "0000-00-00" || rawDate == "0000-00-00 00:00:00") return "-"
+    private fun convertDate(date: String): String {
+        if (date == "0000-00-00" || date == "0000-00-00 00:00:00" || date == "") return "-"
         val formatter = SimpleDateFormat("yyyy-MM-dd", appContext.resources.configuration.locales.get(0))
-        val date = formatter.parse(rawDate)
+        val finalDate = formatter.parse(date)
         val newFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", appContext.resources.configuration.locales.get(0))
-        return newFormatter.format(LocalDate.parse(date?.let { formatter.format(it) }))
+        return newFormatter.format(LocalDate.parse(finalDate?.let { formatter.format(it) }))
     }
 
     private fun vibrate(ctx: Context) {

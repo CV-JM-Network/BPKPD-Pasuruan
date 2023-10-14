@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.dataClass.BerkasData
 import com.jaylangkung.bpkpd.databinding.ItemBerkasBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 class BerkasAdapter : RecyclerView.Adapter<BerkasAdapter.ItemHolder>() {
@@ -26,8 +24,7 @@ class BerkasAdapter : RecyclerView.Adapter<BerkasAdapter.ItemHolder>() {
         notifyItemRangeChanged(prevSize, item.size)
     }
 
-    class ItemHolder(private val binding: ItemBerkasBinding, table: String) : RecyclerView.ViewHolder(binding.root) {
-        private val table = table
+    class ItemHolder(private val binding: ItemBerkasBinding, private val table: String) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: BerkasData) {
             binding.apply {
                 val tahun = if (item.tahun != "") item.tahun else item.createddate.substring(0, 4)

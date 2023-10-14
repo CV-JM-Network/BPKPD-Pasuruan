@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.jaylangkung.bpkpd.BuildConfig
-import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.auth.LoginActivity
 import com.jaylangkung.bpkpd.databinding.FragmentSettingBinding
