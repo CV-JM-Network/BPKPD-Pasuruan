@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import com.jaylangkung.bpkpd.dataClass.BerkasResponse
 import com.jaylangkung.bpkpd.dataClass.BerkasRiwayatResponse
 import com.jaylangkung.bpkpd.dataClass.LoginWebappResponse
+import com.jaylangkung.bpkpd.dataClass.TerimaBerkasResponse
 import com.jaylangkung.bpkpd.retrofit.RetrofitClient
 import com.jaylangkung.bpkpd.utils.Constants
 import com.jaylangkung.bpkpd.utils.ErrorHandler
@@ -116,6 +117,36 @@ class ScanQrViewModel(application: Application) : ViewModel() {
 
             override fun onFailure(call: Call<BerkasRiwayatResponse>, t: Throwable) {
                 ErrorHandler().responseHandler(appContext, "getRiwayatBerkas | onFailure", t.message.toString())
+            }
+        })
+    }
+
+    fun terimaBerkas(idAdmin: String, url: String, tokenAuth: String) {
+        RetrofitClient.apiService.terimaBerkas(idAdmin, url, "", tokenAuth).enqueue(object : Callback<TerimaBerkasResponse> {
+            override fun onResponse(call: Call<TerimaBerkasResponse>, response: Response<TerimaBerkasResponse>) {
+                when (response.code()) {
+                    200 -> {
+                        Toasty.success(appContext, response.body()!!.message, Toasty.LENGTH_LONG).show()
+                    }
+
+                    400 -> {
+                        val msg = ErrorHandler().parseError(response.errorBody()!!.string())
+                        Toasty.error(appContext, msg, Toasty.LENGTH_SHORT).show()
+                    }
+
+                    500 -> {
+                        Toasty.error(appContext, "Internal Server Error", Toasty.LENGTH_SHORT).show()
+                    }
+
+                    else -> {
+                        val msg = ErrorHandler().parseError(response.errorBody()!!.string())
+                        ErrorHandler().responseHandler(appContext, "terimaBerkas | onResponse", msg)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<TerimaBerkasResponse>, t: Throwable) {
+                ErrorHandler().responseHandler(appContext, "terimaBerkas | onFailure", t.message.toString())
             }
         })
     }

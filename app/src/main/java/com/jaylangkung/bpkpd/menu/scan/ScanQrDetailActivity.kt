@@ -70,6 +70,9 @@ class ScanQrDetailActivity : AppCompatActivity() {
                 berkasData.observe(this@ScanQrDetailActivity) { berkas ->
                     if (berkas != null) {
                         tabel = berkas.tabel
+                        if (berkas.data[0].prosesBerkas == "masuk") {
+                            terimaBerkas(idAdmin, result, tokenAuth)
+                        }
                         this@ScanQrDetailActivity.berkas = berkas.data[0]
                         berkasIsLoaded = true
 

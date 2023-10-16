@@ -57,6 +57,8 @@ class HomeViewModel(application: Application) : ViewModel() {
                             response.body()?.data!![i].tanggalSelesai = dateConverter(response.body()?.data!![i].tanggalSelesai)
                             response.body()?.data!![i].createddate = dateConverter(response.body()?.data!![i].createddate)
                             response.body()!!.data[i].namaWp = convertCamelCase(response.body()!!.data[i].namaWp)
+                            response.body()!!.data[i].pembeli = convertCamelCase(response.body()!!.data[i].pembeli)
+                            response.body()!!.data[i].penjual = convertCamelCase(response.body()!!.data[i].penjual)
                             response.body()!!.data[i].desaKel = convertCamelCase(response.body()!!.data[i].desaKel)
                             response.body()!!.data[i].kecamatan = convertCamelCase(response.body()!!.data[i].kecamatan)
                             response.body()!!.data[i].contactPerson = if (response.body()!!.data[i].contactPerson == "0000000000000") "-" else response.body()!!.data[i].contactPerson
@@ -84,7 +86,6 @@ class HomeViewModel(application: Application) : ViewModel() {
 
     private fun dateConverter(date: String): String {
         if (date == "0000-00-00 00:00:00" || date == "0000-00-00" || date == "") return "-"
-        // 2021-01-01 00:00:00
         val initialDate: SimpleDateFormat = if (date.length == 19) {
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         } else {
@@ -104,7 +105,6 @@ class HomeViewModel(application: Application) : ViewModel() {
 
     private fun convertStringToDecimal(str: String): String {
         if (str == "") return "0"
-        //remove trailing dot and zero
         val number = str.replace(".0", "").toDouble()
         val formatter = DecimalFormat("#,###")
         return formatter.format(number)

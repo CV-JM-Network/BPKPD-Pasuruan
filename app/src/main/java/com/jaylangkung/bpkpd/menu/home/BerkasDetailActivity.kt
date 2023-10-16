@@ -2,6 +2,7 @@ package com.jaylangkung.bpkpd.menu.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -71,6 +72,7 @@ class BerkasDetailActivity : AppCompatActivity() {
                     if (berkas != null) {
                         tempBerkasData = berkas
                         adapter.setItem(tempBerkasData, tabel)
+                        progressBar.visibility = View.GONE
                     } else {
                         adapter.setItem(emptyList(), tabel)
                     }
@@ -88,6 +90,7 @@ class BerkasDetailActivity : AppCompatActivity() {
                             totalPage += if (viewModel.totalData % limit > 0) 1 else 0
                             if (lastPosition == this@BerkasDetailActivity.adapter.itemCount - 1) {
                                 if (page < totalPage) {
+                                    progressBar.visibility = View.VISIBLE
                                     page += 1
                                     viewModel.getDataBerkas(tabel, limit, page)
                                 }
