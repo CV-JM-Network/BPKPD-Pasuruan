@@ -121,26 +121,30 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         })
     }
 
-    fun terimaBerkas(idAdmin: String, url: String, tokenAuth: String) {
+    fun terimaBerkas(idAdmin: String, url: String, tokenAuth: String, callback: (Boolean) -> Unit) {
         RetrofitClient.apiService.terimaBerkas(idAdmin, url, "", tokenAuth).enqueue(object : Callback<TerimaBerkasResponse> {
             override fun onResponse(call: Call<TerimaBerkasResponse>, response: Response<TerimaBerkasResponse>) {
                 when (response.code()) {
                     200 -> {
                         Toasty.success(appContext, response.body()!!.message, Toasty.LENGTH_LONG).show()
+                        callback(true)
                     }
 
                     400 -> {
                         val msg = ErrorHandler().parseError(response.errorBody()!!.string())
                         Toasty.error(appContext, msg, Toasty.LENGTH_SHORT).show()
+                        callback(false)
                     }
 
                     500 -> {
                         Toasty.error(appContext, "Internal Server Error", Toasty.LENGTH_SHORT).show()
+                        callback(false)
                     }
 
                     else -> {
                         val msg = ErrorHandler().parseError(response.errorBody()!!.string())
                         ErrorHandler().responseHandler(appContext, "terimaBerkas | onResponse", msg)
+                        callback(false)
                     }
                 }
             }

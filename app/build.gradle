@@ -15,8 +15,8 @@ android {
         applicationId "com.jaylangkung.bpkpd"
         minSdk 24
         targetSdk 33
-        versionCode 2
-        versionName "alpha-1.1"
+        versionCode 3
+        versionName "alpha-1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -32,7 +32,7 @@ android {
         }
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
-                def name = "BPKPD-Pasuruan.apk"
+                def name = "Staff-BPKPD-Pasuruan.apk"
                 output.outputFileName = name
             }
         }

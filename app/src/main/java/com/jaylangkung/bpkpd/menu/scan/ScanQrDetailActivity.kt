@@ -70,9 +70,19 @@ class ScanQrDetailActivity : AppCompatActivity() {
                 berkasData.observe(this@ScanQrDetailActivity) { berkas ->
                     if (berkas != null) {
                         tabel = berkas.tabel
+
                         if (berkas.data[0].prosesBerkas == "masuk") {
-                            terimaBerkas(idAdmin, result, tokenAuth)
+                            btnTerimaBerkas.visibility = View.VISIBLE
+                            btnTerimaBerkas.setOnClickListener {
+                                btnTerimaBerkas.startAnimation()
+                                viewModel.terimaBerkas(idAdmin, result, tokenAuth) {
+                                    btnTerimaBerkas.endAnimation()
+                                    viewModel.berkasData.value?.data?.get(0)?.prosesBerkas = "dalam proses"
+                                    btnTerimaBerkas.visibility = View.GONE
+                                }
+                            }
                         }
+
                         this@ScanQrDetailActivity.berkas = berkas.data[0]
                         berkasIsLoaded = true
 
