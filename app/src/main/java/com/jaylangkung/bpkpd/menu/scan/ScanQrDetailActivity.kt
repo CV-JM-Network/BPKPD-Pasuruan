@@ -75,7 +75,7 @@ class ScanQrDetailActivity : AppCompatActivity() {
                             btnTerimaBerkas.visibility = View.VISIBLE
                             btnTerimaBerkas.setOnClickListener {
                                 btnTerimaBerkas.startAnimation()
-                                viewModel.terimaBerkas(idAdmin, result, tokenAuth) {
+                                viewModel.terimaBerkas(result) {
                                     btnTerimaBerkas.endAnimation()
                                     viewModel.berkasData.value?.data?.get(0)?.prosesBerkas = "dalam proses"
                                     btnTerimaBerkas.visibility = View.GONE

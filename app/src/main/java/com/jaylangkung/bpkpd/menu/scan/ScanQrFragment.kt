@@ -14,6 +14,7 @@ import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.databinding.FragmentScanQrBinding
+import com.jaylangkung.bpkpd.menu.home.HomeFragment
 import com.jaylangkung.bpkpd.utils.ErrorHandler
 import com.jaylangkung.bpkpd.viewModel.ScanQrViewModel
 import com.jaylangkung.bpkpd.viewModel.ViewModelFactory
@@ -48,9 +49,9 @@ class ScanQrFragment : Fragment() {
                         viewModel.validateQRCode(qrString.text) { result ->
                             when (result) {
                                 "webapp_success" -> {
-                                    val intent = Intent(requireContext(), MainActivity::class.java)
-                                    startActivity(intent)
-                                    requireActivity().finish()
+                                    val bundle = Bundle()
+                                    bundle.putString("page", "home")
+                                    (activity as MainActivity).loadFragment(HomeFragment(), bundle)
                                 }
 
                                 "webapp_failure" -> {
@@ -65,10 +66,23 @@ class ScanQrFragment : Fragment() {
                                 }
 
                                 else -> {
-                                    startActivity(Intent(requireContext(), ScanQrDetailActivity::class.java).putExtra(
-                                        "result", result
-                                    ))
-                                    requireActivity().finish()
+                                    if (arguments != null) {
+                                        if (requireArguments().getString("process") == "terima_berkas") {
+                                            viewModel.terimaBerkas(result) {
+                                                viewModel.berkasData.value?.data?.get(0)?.prosesBerkas = "dalam proses"
+                                                val bundle = Bundle()
+                                                bundle.putString("page", "home")
+                                                (activity as MainActivity).loadFragment(HomeFragment(), bundle)
+                                            }
+                                        }
+                                    } else {
+                                        startActivity(
+                                            Intent(requireContext(), ScanQrDetailActivity::class.java).putExtra(
+                                                "result", result
+                                            )
+                                        )
+                                        requireActivity().finish()
+                                    }
                                 }
                             }
                         }

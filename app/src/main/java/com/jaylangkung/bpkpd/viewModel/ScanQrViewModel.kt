@@ -75,7 +75,8 @@ class ScanQrViewModel(application: Application) : ViewModel() {
                             response.body()!!.data[i].namaWp = convertCamelCase(response.body()!!.data[i].namaWp)
                             response.body()!!.data[i].desaKel = convertCamelCase(response.body()!!.data[i].desaKel)
                             response.body()!!.data[i].kecamatan = convertCamelCase(response.body()!!.data[i].kecamatan)
-                            response.body()!!.data[i].contactPerson = if (response.body()!!.data[i].contactPerson == "0000000000000") "-" else response.body()!!.data[i].contactPerson
+                            response.body()!!.data[i].contactPerson =
+                                if (response.body()!!.data[i].contactPerson == "0000000000000") "-" else response.body()!!.data[i].contactPerson
                         }
                         berkasData.postValue(response.body())
                     }
@@ -121,7 +122,10 @@ class ScanQrViewModel(application: Application) : ViewModel() {
         })
     }
 
-    fun terimaBerkas(idAdmin: String, url: String, tokenAuth: String, callback: (Boolean) -> Unit) {
+    fun terimaBerkas(url: String, callback: (Boolean) -> Unit) {
+        val myPreferences = MySharedPreferences(appContext)
+        val idAdmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
+        val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
         RetrofitClient.apiService.terimaBerkas(idAdmin, url, "", tokenAuth).enqueue(object : Callback<TerimaBerkasResponse> {
             override fun onResponse(call: Call<TerimaBerkasResponse>, response: Response<TerimaBerkasResponse>) {
                 when (response.code()) {

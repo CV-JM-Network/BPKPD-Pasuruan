@@ -68,4 +68,6 @@
     <string name="jenis_pengurangan">Jenis: %1$s</string>
     <string name="pengajuan">Pengajuan: %1$s</string>
     <string name="btn_terima_berkas">Terima Berkas</string>
+    <string name="icon_terima_berkas">icon terima berkas</string>
+    <string name="terima_berkas">Terima Berkas</string>
 </resources>

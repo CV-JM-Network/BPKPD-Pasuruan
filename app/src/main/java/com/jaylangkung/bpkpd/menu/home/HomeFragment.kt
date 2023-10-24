@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.jaylangkung.bpkpd.MainActivity
 import com.jaylangkung.bpkpd.R
 import com.jaylangkung.bpkpd.databinding.FragmentHomeBinding
+import com.jaylangkung.bpkpd.menu.scan.ScanQrFragment
 import com.jaylangkung.bpkpd.viewModel.HomeViewModel
 import com.jaylangkung.bpkpd.viewModel.ViewModelFactory
 import java.util.Calendar
@@ -83,6 +85,13 @@ class HomeFragment : Fragment() {
             btnNpwpd.setOnClickListener {
                 activity?.startActivity(Intent(requireContext(), BerkasDetailActivity::class.java).putExtra(BerkasDetailActivity.EXTRA_TABEL, "npwpd"))
                 activity?.finish()
+            }
+
+            btnTerimaBerkas.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString("process", "terima_berkas")
+                bundle.putString("page", "scan")
+                (activity as MainActivity).loadFragment(ScanQrFragment(), bundle)
             }
         }
 

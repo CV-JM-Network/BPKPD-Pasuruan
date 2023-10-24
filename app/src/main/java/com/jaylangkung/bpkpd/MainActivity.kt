@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                 loadFragment(HomeFragment())
             }
 
-
             bottomBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
                 override fun onTabSelected(lastIndex: Int, lastTab: AnimatedBottomBar.Tab?, newIndex: Int, newTab: AnimatedBottomBar.Tab) {
                     when (newTab.id) {
@@ -82,9 +81,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    fun loadFragment(fragment: Fragment, bundle: Bundle? = null) {
         supportFragmentManager.beginTransaction().apply {
-//            fragment.arguments = bundle
+            if (bundle != null) {
+                bundle.getString("page")?.let {
+                    when (it) {
+                        "home" -> binding.bottomBar.selectTabById(R.id.nav_home, true)
+                        "scan" -> binding.bottomBar.selectTabById(R.id.nav_scan_qr, true)
+                        "setting" -> binding.bottomBar.selectTabById(R.id.nav_settings, true)
+                        else -> binding.bottomBar.selectTabById(R.id.nav_home, true)
+                    }
+                }
+                fragment.arguments = bundle
+            }
             replace(R.id.fragment_container, fragment)
             commit()
         }
