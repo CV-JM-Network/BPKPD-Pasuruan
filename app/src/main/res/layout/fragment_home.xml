@@ -320,7 +320,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_weight="1"
                 android:background="@drawable/menu_box"
-                android:backgroundTint="?attr/colorSecondaryContainer"
+                android:backgroundTint="?attr/colorTertiaryContainer"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -334,14 +334,14 @@
                     android:layout_marginEnd="6dp"
                     android:contentDescription="@string/icon_terima_berkas"
                     android:src="@drawable/ic_scan_qr"
-                    app:tint="?attr/colorOnSecondaryContainer" />
+                    app:tint="?attr/colorOnTertiaryContainer" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/terima_berkas"
-                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textColor="?attr/colorOnTertiaryContainer"
                     android:textSize="16sp" />
 
             </LinearLayout>
