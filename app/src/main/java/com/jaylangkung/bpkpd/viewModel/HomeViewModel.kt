@@ -23,7 +23,6 @@ class HomeViewModel(application: Application) : ViewModel() {
 
     val berkasData: MutableLiveData<List<BerkasData>> = MutableLiveData()
     var totalData: Int = 0
-    val berkasRiwayatData: MutableLiveData<BerkasRiwayatResponse> = MutableLiveData()
 
     val userData: LiveData<UserData> = run {
         myPreferences = MySharedPreferences(appContext)

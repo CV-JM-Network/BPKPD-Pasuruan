@@ -7,7 +7,6 @@ import android.database.Cursor
 import android.database.DatabaseUtils
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -186,7 +185,7 @@ object FileUtils {
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
-    fun getDataColumn(
+    private fun getDataColumn(
         context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?
     ): String? {
         var cursor: Cursor? = null
@@ -200,8 +199,8 @@ object FileUtils {
             )
             if (cursor != null && cursor.moveToFirst()) {
                 if (DEBUG) DatabaseUtils.dumpCursor(cursor)
-                val column_index = cursor.getColumnIndexOrThrow(column)
-                return cursor.getString(column_index)
+                val columnIndex = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(columnIndex)
             }
         } finally {
             cursor?.close()
@@ -228,7 +227,7 @@ object FileUtils {
             "$TAG File -",
             "Authority: " + uri.authority + ", Fragment: " + uri.fragment + ", Port: " + uri.port + ", Query: " + uri.query + ", Scheme: " + uri.scheme + ", Host: " + uri.host + ", Segments: " + uri.pathSegments.toString()
         )
-        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+        val isKitKat = true
 
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
@@ -299,22 +298,22 @@ object FileUtils {
      * @author paulburke
      */
     fun getReadableFileSize(size: Int): String {
-        val BYTES_IN_KILOBYTES = 1024
+        val byteInKilobytes = 1024
         val dec = DecimalFormat("###.#")
-        val KILOBYTES = " KB"
-        val MEGABYTES = " MB"
-        val GIGABYTES = " GB"
+        val kilobytes = " KB"
+        val megabytes = " MB"
+        val gigabytes = " GB"
         var fileSize = 0f
-        var suffix = KILOBYTES
-        if (size > BYTES_IN_KILOBYTES) {
-            fileSize = (size / BYTES_IN_KILOBYTES).toFloat()
-            if (fileSize > BYTES_IN_KILOBYTES) {
-                fileSize /= BYTES_IN_KILOBYTES
-                if (fileSize > BYTES_IN_KILOBYTES) {
-                    fileSize /= BYTES_IN_KILOBYTES
-                    suffix = GIGABYTES
+        var suffix = kilobytes
+        if (size > byteInKilobytes) {
+            fileSize = (size / byteInKilobytes).toFloat()
+            if (fileSize > byteInKilobytes) {
+                fileSize /= byteInKilobytes
+                if (fileSize > byteInKilobytes) {
+                    fileSize /= byteInKilobytes
+                    suffix = gigabytes
                 } else {
-                    suffix = MEGABYTES
+                    suffix = megabytes
                 }
             }
         }
@@ -396,7 +395,7 @@ object FileUtils {
      *
      * @author paulburke
      */
-    var sComparator: Comparator<File?> = Comparator<File?> { p0, p1 -> // Sort alphabetically by lower case, which is much cleaner
+    var sComparator: Comparator<File?> = Comparator { p0, p1 -> // Sort alphabetically by lower case, which is much cleaner
         p1?.name?.let { p0?.name?.lowercase(Locale.getDefault())?.compareTo(it.lowercase(Locale.getDefault())) } ?: 0
     }
 

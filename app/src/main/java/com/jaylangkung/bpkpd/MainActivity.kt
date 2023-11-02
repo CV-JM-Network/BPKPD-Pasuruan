@@ -12,12 +12,19 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
+import com.jaylangkung.bpkpd.dataClass.LoginResponse
 import com.jaylangkung.bpkpd.databinding.ActivityMainBinding
 import com.jaylangkung.bpkpd.menu.home.HomeFragment
 import com.jaylangkung.bpkpd.menu.scan.ScanQrFragment
 import com.jaylangkung.bpkpd.menu.setting.SettingFragment
+import com.jaylangkung.bpkpd.retrofit.RetrofitClient
+import com.jaylangkung.bpkpd.utils.Constants
+import com.jaylangkung.bpkpd.utils.ErrorHandler
 import com.jaylangkung.bpkpd.utils.MySharedPreferences
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,9 +43,10 @@ class MainActivity : AppCompatActivity() {
         askPermission()
         Firebase.messaging.token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val token = task.result
-//                val iduser = myPreferences.getValue(Constants.USER_IDAKTIVASI).toString()
-//                addToken(iduser, token)
+                val deviceToken = task.result!!
+                val idadmin = myPreferences.getValue(Constants.USER_IDADMIN).toString()
+                val tokenAuth = myPreferences.getValue(Constants.TokenAuth).toString()
+                updateDeviceToken(idadmin, deviceToken, tokenAuth)
             } else {
                 val exception = task.exception
                 exception?.message?.let {
@@ -128,5 +136,27 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity, permissionsToRequest.toTypedArray(), 100
             )
         }
+    }
+
+    private fun updateDeviceToken(idadmin: String, deviceToken: String, tokenAuth: String) {
+        RetrofitClient.apiService.updateDeviceToken(idadmin, deviceToken, tokenAuth).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful) {
+                    if (response.body()!!.status == "success") {
+                        Log.d("updateDeviceToken", response.body()!!.message)
+                    }
+                } else {
+                    ErrorHandler().responseHandler(
+                        this@MainActivity, "updateDeviceToken | onResponse", response.message()
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                ErrorHandler().responseHandler(
+                    this@MainActivity, "updateDeviceToken | onFailure", t.message.toString()
+                )
+            }
+        })
     }
 }

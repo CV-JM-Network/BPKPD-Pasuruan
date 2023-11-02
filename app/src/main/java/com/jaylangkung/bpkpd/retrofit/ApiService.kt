@@ -27,6 +27,14 @@ interface ApiService {
         @Header("Authorization") authorization: String,
     ): Call<LoginResponse>
 
+    @FormUrlEncoded
+    @POST("admin/update/device_token")
+    fun updateDeviceToken(
+        @Field("idadmin") idadmin: String,
+        @Field("device_token") deviceToken: String,
+        @Header("Authorization") authorization: String,
+    ): Call<LoginResponse>
+
     @GET("cari/berkas/dengan/qrcode")
     fun getBerkas(
         @Query("idadmin") idadmin: String,
