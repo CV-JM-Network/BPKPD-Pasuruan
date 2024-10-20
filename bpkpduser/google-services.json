@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "895658368142",
+    "project_id": "jm-network",
+    "storage_bucket": "jm-network.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895658368142:android:cce1451a65aece0210fddf",
+        "android_client_info": {
+          "package_name": "com.jaylangkung.bpkpduser"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwnTYrPd4SigB4WReADSMYiPsydiH1IvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895658368142:android:076419010fb3b5cb10fddf",
+        "android_client_info": {
+          "package_name": "com.jmnetwork.e_jartas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwnTYrPd4SigB4WReADSMYiPsydiH1IvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
