@@ -14,7 +14,10 @@ class MySharedPreferences(context: Context) {
         mSharedPreferences.edit().clear().apply()
     }
 
-    fun setValue(key: String, value: String) {
+    fun setValue(key: String, value: String?) {
+        if (value == null) {
+            return
+        }
         mSharedPreferences.edit().putString(key, value).apply()
     }
 

@@ -30,7 +30,7 @@ interface ApiService {
     ): Call<DefaultResponse>
 
     @FormUrlEncoded
-    @POST("login")
+    @POST("user/login")
     fun login(
         @Field("email") email: String,
         @Field("password") password: String,

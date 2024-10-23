@@ -36,7 +36,7 @@ class BaseRepositoryImpl : BaseRepository {
                 } else {
                     CustomHandler().responseHandler(context, "Register|onResponse", response.message())
                     registerData.postValue(
-                        DefaultResponse(response.message(), "error")
+                        DefaultResponse(response.message(), "error", response.code())
                     )
                 }
             }
@@ -44,7 +44,7 @@ class BaseRepositoryImpl : BaseRepository {
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 CustomHandler().responseHandler(context, "Register|onFailure", t.message.toString())
                 registerData.postValue(
-                    DefaultResponse(t.message.toString(), "error")
+                    DefaultResponse(t.message.toString(), "error", 500)
                 )
             }
         })

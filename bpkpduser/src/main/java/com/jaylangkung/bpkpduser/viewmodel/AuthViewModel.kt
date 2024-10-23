@@ -84,11 +84,8 @@ class AuthViewModel(application: Application) : ViewModel() {
                 myPreferences.setValue(Constants.USER_FOTO, data.img)
                 startActivityEvent.value = Constants.LOGIN
             } else {
-                when (val msg = response.message) {
-                    "Unauthorized" -> startActivityEvent.value = "Email atau kata sandi salah"
-                    "Internal server error" -> startActivityEvent.value = "Internal server error"
-                    else -> startActivityEvent.value = msg
-                }            }
+                startActivityEvent.value = response.status
+            }
         }
     }
 }

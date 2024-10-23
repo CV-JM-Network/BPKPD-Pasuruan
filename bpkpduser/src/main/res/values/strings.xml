@@ -3,4 +3,19 @@
     <string name="try_again">Silahkan Coba Lagi</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="register_title">Registrasi Akun</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="name">Nama Pengguna</string>
+    <string name="register_button">Buat Akun Baru</string>
+    <string name="address">Alamat</string>
+    <string name="phone">No. HP</string>
+    <string name="have_account">Sudah punya akun?</string>
+    <string name="login">Login</string>
+    <string name="login_button">Login</string>
+    <string name="dont_have_account">Belum punya akun?</string>
+    <string name="register">Registrasi</string>
+    <string name="login_title">Login Akun</string>
+    <string name="otp_title">Kode Konfirmasi</string>
+    <string name="submit_otp">Konfirmasi</string>
 </resources>

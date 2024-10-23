@@ -34,9 +34,13 @@ class AuthActivity : AppCompatActivity() {
                 "register" -> {
                     loadFragment(RegisterFragment())
                 }
+
+                "otp" -> {
+                    loadFragment(OtpFragment())
+                }
             }
         } else {
-            loadFragment(LoginFragment())
+            loadFragment(RegisterFragment())
         }
     }
 

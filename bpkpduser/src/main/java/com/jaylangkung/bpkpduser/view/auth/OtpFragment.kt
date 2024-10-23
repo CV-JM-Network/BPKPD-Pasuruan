@@ -1,31 +1,28 @@
 package com.jaylangkung.bpkpduser.view.auth
 
-import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.github.razir.progressbutton.attachTextChangeAnimator
-import com.github.razir.progressbutton.bindProgressButton
-import com.github.razir.progressbutton.showProgress
-import com.jaylangkung.bpkpduser.databinding.FragmentRegisterBinding
+import com.jaylangkung.bpkpduser.databinding.FragmentOtpBinding
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 
+class OtpFragment : Fragment() {
 
-class RegisterFragment : Fragment() {
-
-    private lateinit var _binding: FragmentRegisterBinding
+    private lateinit var _binding: FragmentOtpBinding
     private val binding get() = _binding
     private lateinit var viewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentOtpBinding.inflate(inflater, container, false)
         val factory = ViewModelFactory.getInstance(requireActivity().application)
         viewModel = ViewModelProvider(requireActivity(), factory)[AuthViewModel::class.java]
 
@@ -45,20 +42,20 @@ class RegisterFragment : Fragment() {
         })
 
         binding.apply {
-            bindProgressButton(btnRegister)
-            btnRegister.setOnClickListener {
-                btnRegister.apply {
-                    attachTextChangeAnimator()
-                    showProgress {
-                        progressColor = Color.WHITE
-                        buttonText = "Proses Registrasi"
-                    }
-                }
-            }
+            val otpFields = listOf(otp1, otp2, otp3, otp4)
 
-            btnLogin.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction().setReorderingAllowed(true).replace(com.jaylangkung.bpkpduser.R.id.auth_fragment_container, LoginFragment())
-                    .setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+            otpFields.forEachIndexed { index, editText ->
+                editText.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        if (s.toString().isNotEmpty() && index < otpFields.size - 1) {
+                            otpFields[index + 1].requestFocus()
+                        }
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {}
+                })
             }
         }
     }

@@ -7,6 +7,8 @@ plugins {
     id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -78,7 +80,8 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.activity:activity:1.9.3")
+    implementation("androidx.activity:activity-ktx:1.9.3")
+    implementation("com.google.android.material:material:1.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -117,7 +120,7 @@ dependencies {
 
     // Loading Animation
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
-    implementation("com.github.chandreshandroid:MaterialProgressButton:1.7")
+    implementation("com.github.razir.progressbutton:progressbutton:2.1.0")
 
     // QR Code Scanner
     implementation("com.github.yuriy-budiyev:code-scanner:2.3.2")
