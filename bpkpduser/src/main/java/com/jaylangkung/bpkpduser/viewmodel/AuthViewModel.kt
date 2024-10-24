@@ -18,7 +18,10 @@ class AuthViewModel(application: Application) : ViewModel() {
     private var registerRequest: RegisterRequest? = null
     private var loginRequest: LoginRequest? = null
 
-    val startActivityEvent = MutableLiveData<String>()
+    val startActivityEvent = MutableLiveData<Pair<String, String>>()
+    val register = "Regis"
+    val confirmed = "Confirmed"
+    val login = "Login"
 
     fun setRegisterRequest(registerRequest: RegisterRequest) {
         this.registerRequest = registerRequest
@@ -59,10 +62,24 @@ class AuthViewModel(application: Application) : ViewModel() {
         val registerResponse = repository.register(appContext, registerRequest!!, tokenAuth)
 
         registerResponse.observeForever { response ->
-            if (response.status == "success") {
-                startActivityEvent.value = "registered"
+            if (response.status.contains("Success")) {
+                startActivityEvent.value = Pair(register, "Registered")
             } else {
-                startActivityEvent.value = response.message
+                startActivityEvent.value = Pair(register, response.status)
+            }
+        }
+    }
+
+    fun confirmRegister(kode: String) {
+        val tokenAuth = BuildConfig.API_KEY
+        myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+        val confirmRegisterResponse = repository.confirmRegister(appContext, kode, tokenAuth)
+
+        confirmRegisterResponse.observeForever { response ->
+            if (response.status.contains("Success")) {
+                startActivityEvent.value = Pair(confirmed, "Confirmed")
+            } else {
+                startActivityEvent.value = Pair(confirmed, response.status)
             }
         }
     }
@@ -82,9 +99,9 @@ class AuthViewModel(application: Application) : ViewModel() {
                 myPreferences.setValue(Constants.USER_ALAMAT, data.alamat)
                 myPreferences.setValue(Constants.USER_TELP, data.telpon)
                 myPreferences.setValue(Constants.USER_FOTO, data.img)
-                startActivityEvent.value = Constants.LOGIN
+                startActivityEvent.value = Pair(login, Constants.LOGIN)
             } else {
-                startActivityEvent.value = response.status
+                startActivityEvent.value = Pair(login, response.message)
             }
         }
     }

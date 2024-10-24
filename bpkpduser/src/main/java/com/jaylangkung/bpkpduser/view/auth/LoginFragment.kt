@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
@@ -49,26 +50,28 @@ class LoginFragment : Fragment() {
             }
         })
 
-        viewModel.startActivityEvent.observe(viewLifecycleOwner) {
-            when (it) {
-                Constants.LOGIN -> {
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    requireActivity().finish()
-                }
+        viewModel.startActivityEvent.observe(viewLifecycleOwner) { (key, it) ->
+            if (key == viewModel.login) {
+                when (it) {
+                    Constants.LOGIN -> {
+                        startActivity(Intent(requireContext(), MainActivity::class.java))
+                        requireActivity().finish()
+                    }
 
-                "Unauthorized" -> {
-                    binding.btnLogin.hideProgress("Login")
-                    Toasty.error(requireContext(), "Email atau kata sandi salah", Toasty.LENGTH_SHORT).show()
-                }
+                    "Unauthorized" -> {
+                        binding.btnLogin.hideProgress("Login")
+                        Toasty.error(requireContext(), "Email atau kata sandi salah", Toasty.LENGTH_SHORT).show()
+                    }
 
-                "Internal Server Error" -> {
-                    binding.btnLogin.hideProgress("Login")
-                    Toasty.error(requireContext(), "Terjadi kesalahan pada server", Toasty.LENGTH_SHORT).show()
-                }
+                    "Internal Server Error" -> {
+                        binding.btnLogin.hideProgress("Login")
+                        Toasty.error(requireContext(), "Terjadi kesalahan pada server", Toasty.LENGTH_SHORT).show()
+                    }
 
-                else -> {
-                    binding.btnLogin.hideProgress("Login")
-                    Toasty.error(requireContext(), it, Toasty.LENGTH_SHORT).show()
+                    else -> {
+                        binding.btnLogin.hideProgress("Login")
+                        Toasty.error(requireContext(), it, Toasty.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -84,6 +87,7 @@ class LoginFragment : Fragment() {
                 val validate = viewModel.validate()
                 if (validate.isEmpty()) {
                     viewModel.login()
+
                     btnLogin.showProgress {
                         progressColor = Color.WHITE
                         buttonText = "Proses Login"
@@ -94,8 +98,8 @@ class LoginFragment : Fragment() {
             }
 
             btnRegister.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction().setReorderingAllowed(true).replace(com.jaylangkung.bpkpduser.R.id.auth_fragment_container, RegisterFragment())
-                    .setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                requireActivity().supportFragmentManager.beginTransaction().setReorderingAllowed(true).replace(R.id.auth_fragment_container, RegisterFragment())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
             }
         }
     }

@@ -30,6 +30,14 @@ interface ApiService {
     ): Call<DefaultResponse>
 
     @FormUrlEncoded
+    @POST("user/registrasi/konfirmasi")
+    fun confirmRegister(
+        @Field("kode_konfirmasi") kode: String,
+        @Field("device_id") deviceToken: String,
+        @Header("Authorization") authorization: String
+    ): Call<DefaultResponse>
+
+    @FormUrlEncoded
     @POST("user/login")
     fun login(
         @Field("email") email: String,

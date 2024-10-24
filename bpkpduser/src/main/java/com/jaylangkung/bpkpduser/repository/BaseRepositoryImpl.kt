@@ -14,14 +14,10 @@ import retrofit2.Response
 class BaseRepositoryImpl : BaseRepository {
     private val apiService = RetrofitClient.apiService
 
-    override fun register(
-        context: Context,
-        registerRequest: RegisterRequest,
-        tokenAuth: String
-    ): LiveData<DefaultResponse> {
+    override fun register(context: Context, registerRequest: RegisterRequest, tokenAuth: String): LiveData<DefaultResponse> {
         val registerData = MutableLiveData<DefaultResponse>()
 
-        RetrofitClient.apiService.register(
+        apiService.register(
             registerRequest.email,
             registerRequest.password,
             registerRequest.nama,
@@ -35,8 +31,9 @@ class BaseRepositoryImpl : BaseRepository {
                     registerData.postValue(response.body())
                 } else {
                     CustomHandler().responseHandler(context, "Register|onResponse", response.message())
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
                     registerData.postValue(
-                        DefaultResponse(response.message(), "error", response.code())
+                        DefaultResponse(response.message(), errResp.first)
                     )
                 }
             }
@@ -44,7 +41,7 @@ class BaseRepositoryImpl : BaseRepository {
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 CustomHandler().responseHandler(context, "Register|onFailure", t.message.toString())
                 registerData.postValue(
-                    DefaultResponse(t.message.toString(), "error", 500)
+                    DefaultResponse(t.message.toString(), "error")
                 )
             }
         })
@@ -52,14 +49,42 @@ class BaseRepositoryImpl : BaseRepository {
         return registerData
     }
 
-    override fun login(
-        context: Context,
-        loginRequest: LoginRequest,
-        tokenAuth: String
-    ): LiveData<LoginResponse> {
+    override fun confirmRegister(context: Context, kode: String, tokenAuth: String): LiveData<DefaultResponse> {
+        val confirmData = MutableLiveData<DefaultResponse>()
+
+        apiService.confirmRegister(
+            kode,
+            "null",
+            tokenAuth,
+        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                if (response.isSuccessful) {
+                    confirmData.postValue(response.body())
+                } else {
+                    CustomHandler().responseHandler(context, "ConfirmRegister|onResponse", response.message())
+                    val test = response.errorBody().toString()
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
+                    confirmData.postValue(
+                        DefaultResponse(response.message(), errResp.first)
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                CustomHandler().responseHandler(context, "ConfirmRegister|onFailure", t.message.toString())
+                confirmData.postValue(
+                    DefaultResponse(t.message.toString(), "error")
+                )
+            }
+        })
+
+        return confirmData
+    }
+
+    override fun login(context: Context, loginRequest: LoginRequest, tokenAuth: String): LiveData<LoginResponse> {
         val loginData = MutableLiveData<LoginResponse>()
 
-        RetrofitClient.apiService.login(
+        apiService.login(
             loginRequest.email,
             loginRequest.password,
             "null",
@@ -70,8 +95,9 @@ class BaseRepositoryImpl : BaseRepository {
                     loginData.postValue(response.body())
                 } else {
                     CustomHandler().responseHandler(context, "Login|onResponse", response.message())
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
                     loginData.postValue(
-                        LoginResponse(null, response.message(), "error", "")
+                        LoginResponse(null, response.message(), errResp.first, "")
                     )
                 }
             }

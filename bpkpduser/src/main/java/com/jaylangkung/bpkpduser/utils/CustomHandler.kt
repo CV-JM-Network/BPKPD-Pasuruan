@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.crashlytics.setCustomKeys
 import com.google.firebase.ktx.Firebase
-import com.jaylangkung.bpkpduser.R
 import es.dmoral.toasty.Toasty
 import org.json.JSONObject
 import java.util.Calendar
@@ -64,15 +63,17 @@ class CustomHandler {
             }
 
             else -> {
-                Toasty.error(context, R.string.try_again, Toasty.LENGTH_LONG).show()
+//                Toasty.error(context, message, Toasty.LENGTH_LONG).show()
                 Log.e("Logger", "context : $context, fun : $func, message : $message, time : $now")
                 crashlytics.recordException(Exception("General error: $message, context: $ctx"))
             }
         }
     }
 
-    fun parseError(message: String): String {
+    fun parseError(message: String): Pair<String, String> {
         val errJson = JSONObject(message)
-        return errJson.optString("message", "Error")
+        val status = errJson.optString("status", "error")
+        val msg = errJson.optString("message", "Error")
+        return Pair(status, msg)
     }
 }

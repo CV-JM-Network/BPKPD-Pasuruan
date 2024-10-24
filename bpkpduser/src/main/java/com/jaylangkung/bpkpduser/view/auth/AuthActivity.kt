@@ -40,7 +40,7 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
         } else {
-            loadFragment(RegisterFragment())
+            loadFragment(OtpFragment())
         }
     }
 

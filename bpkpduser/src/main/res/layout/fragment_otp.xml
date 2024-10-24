@@ -28,11 +28,20 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/otp_title"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="24sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/otp_description"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

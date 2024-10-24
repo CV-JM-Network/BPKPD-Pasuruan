@@ -9,5 +9,6 @@ import com.jaylangkung.bpkpduser.model.RegisterRequest
 
 interface BaseRepository {
     fun register(context: Context, registerRequest: RegisterRequest, tokenAuth: String): LiveData<DefaultResponse>
+    fun confirmRegister(context: Context, kode: String, tokenAuth: String): LiveData<DefaultResponse>
     fun login(context: Context, loginRequest: LoginRequest, tokenAuth: String): LiveData<LoginResponse>
 }
