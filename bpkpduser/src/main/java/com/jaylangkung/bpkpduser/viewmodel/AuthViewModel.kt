@@ -32,28 +32,25 @@ class AuthViewModel(application: Application) : ViewModel() {
     }
 
     fun validate(): String {
-        return when {
-            registerRequest != null -> {
-                when {
-                    registerRequest!!.email.isEmpty() -> "Email tidak boleh kosong"
-                    registerRequest!!.password.isEmpty() -> "Kata sandi tidak boleh kosong"
-                    registerRequest!!.nama.isEmpty() -> "Nama tidak boleh kosong"
-                    registerRequest!!.alamat.isEmpty() -> "Alamat tidak boleh kosong"
-                    registerRequest!!.telpon.isEmpty() -> "Nomor telepon tidak boleh kosong"
-                    else -> ""
-                }
-            }
+        val errors = mutableListOf<String>()
 
-            loginRequest != null -> {
-                when {
-                    loginRequest!!.email.isEmpty() -> "Email tidak boleh kosong"
-                    loginRequest!!.password.isEmpty() -> "Kata sandi tidak boleh kosong"
-                    else -> ""
-                }
-            }
-
-            else -> ""
+        registerRequest?.let {
+            if (it.email.isEmpty()) errors.add("Email")
+            if (it.password.isEmpty()) errors.add("Kata sandi")
+            if (it.nama.isEmpty()) errors.add("Nama")
+            if (it.alamat.isEmpty()) errors.add("Alamat")
+            if (it.telpon.isEmpty()) errors.add("Nomor")
         }
+
+        loginRequest?.let {
+            if (it.email.isEmpty()) errors.add("Email")
+            if (it.password.isEmpty()) errors.add("Kata sandi")
+        }
+
+        val errMsg = errors.joinToString(", ") + " tidak boleh kosong"
+        registerRequest = null
+        loginRequest = null
+        return if (errors.isEmpty()) "" else errMsg
     }
 
     fun register() {

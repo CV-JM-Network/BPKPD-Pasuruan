@@ -73,6 +73,11 @@ class RegisterFragment : Fragment() {
         binding.apply {
             bindProgressButton(btnRegister)
             btnRegister.setOnClickListener {
+                btnRegister.showProgress {
+                    progressColor = Color.WHITE
+                    buttonText = "Proses Registrasi"
+                }
+
                 viewModel.setRegisterRequest(
                     RegisterRequest(
                         email = tvValueEmailRegister.text.toString(),
@@ -84,15 +89,10 @@ class RegisterFragment : Fragment() {
                 )
                 val validate = viewModel.validate()
                 if (validate.isEmpty()) {
-                    btnRegister.apply {
-                        viewModel.register()
-                        showProgress {
-                            progressColor = Color.WHITE
-                            buttonText = "Proses Registrasi"
-                        }
-                    }
+                    viewModel.register()
                 } else {
-                    btnLogin.hideProgress(R.string.register_button)
+                    Toasty.error(requireContext(), validate, Toasty.LENGTH_LONG).show()
+                    btnRegister.hideProgress(R.string.register_button)
                 }
 
 

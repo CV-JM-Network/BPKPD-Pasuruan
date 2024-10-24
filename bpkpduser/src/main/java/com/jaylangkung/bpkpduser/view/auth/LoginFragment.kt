@@ -79,6 +79,11 @@ class LoginFragment : Fragment() {
         binding.apply {
             bindProgressButton(btnLogin)
             btnLogin.setOnClickListener {
+                btnLogin.showProgress {
+                    progressColor = Color.WHITE
+                    buttonText = "Proses Login"
+                }
+
                 val email = tvValueEmailLogin.text.toString()
                 val password = tvValuePasswordLogin.text.toString()
                 viewModel.setLoginRequest(
@@ -87,12 +92,8 @@ class LoginFragment : Fragment() {
                 val validate = viewModel.validate()
                 if (validate.isEmpty()) {
                     viewModel.login()
-
-                    btnLogin.showProgress {
-                        progressColor = Color.WHITE
-                        buttonText = "Proses Login"
-                    }
                 } else {
+                    Toasty.error(requireContext(), validate, Toasty.LENGTH_LONG).show()
                     btnLogin.hideProgress(R.string.login_button)
                 }
             }

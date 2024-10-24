@@ -56,7 +56,7 @@ android {
     productFlavors {
         create("dev") {
             dimension = "test"
-            versionNameSuffix = "dev"
+            versionNameSuffix = "-dev"
             buildOutputs.all {
                 val apkName = "User-BPKPD-Pasuruan" + "-" + defaultConfig.versionName + "-dev" + ".apk"
                 val variantOutputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl

@@ -52,6 +52,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPasswordLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -67,16 +68,28 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/forgot_password"
+                android:textColor="?attr/colorOutline"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/menu_box"
                 android:backgroundTint="?attr/colorPrimary"
                 android:padding="16dp"
                 android:text="@string/login_button"
-                android:textColor="?attr/colorOnPrimary" />
+                android:textColor="?attr/colorOnPrimary"
+                app:rippleColor="?attr/colorSecondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

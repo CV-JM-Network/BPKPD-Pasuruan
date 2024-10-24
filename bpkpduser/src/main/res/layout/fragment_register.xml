@@ -117,7 +117,7 @@
                     android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -126,7 +126,8 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:padding="16dp"
                 android:text="@string/register_button"
-                android:textColor="?attr/colorOnPrimary" />
+                android:textColor="?attr/colorOnPrimary"
+                app:rippleColor="?attr/colorSecondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
