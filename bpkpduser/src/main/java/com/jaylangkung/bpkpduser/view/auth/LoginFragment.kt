@@ -99,11 +99,11 @@ class LoginFragment : Fragment() {
             }
 
             btnRegister.setOnClickListener {
-                Utils.loadFragment(requireActivity().supportFragmentManager, RegisterFragment(), R.id.auth_fragment_container)
+                Utils.loadFragment(requireActivity().supportFragmentManager, RegisterFragment(), R.id.auth_fragment_container, backstack = true)
             }
 
             tvForgotPassword.setOnClickListener {
-                Utils.loadFragment(requireActivity().supportFragmentManager, ForgotPassFragment(), R.id.auth_fragment_container)
+                Utils.loadFragment(requireActivity().supportFragmentManager, ForgotPassFragment(), R.id.auth_fragment_container, backstack = true)
             }
         }
     }
