@@ -19,9 +19,17 @@ class AuthViewModel(application: Application) : ViewModel() {
     private var loginRequest: LoginRequest? = null
 
     val startActivityEvent = MutableLiveData<Pair<String, String>>()
+    var userEmail = "user_email"
     val register = "Regis"
     val confirmed = "Confirmed"
     val login = "Login"
+    val forgot = "Forgot"
+    val change = "Change"
+
+    fun init() {
+        val tokenAuth = BuildConfig.API_KEY
+        myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+    }
 
     fun setRegisterRequest(registerRequest: RegisterRequest) {
         this.registerRequest = registerRequest
@@ -48,42 +56,34 @@ class AuthViewModel(application: Application) : ViewModel() {
         }
 
         val errMsg = errors.joinToString(", ") + " tidak boleh kosong"
-        registerRequest = null
-        loginRequest = null
         return if (errors.isEmpty()) "" else errMsg
     }
 
     fun register() {
-        val tokenAuth = BuildConfig.API_KEY
-        myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+        val tokenAuth = myPreferences.getValue(Constants.TOKEN_AUTH).toString()
         val registerResponse = repository.register(appContext, registerRequest!!, tokenAuth)
 
         registerResponse.observeForever { response ->
-            if (response.status.contains("Success")) {
-                startActivityEvent.value = Pair(register, "Registered")
-            } else {
-                startActivityEvent.value = Pair(register, response.status)
-            }
+            val status = if (response.status.contains("Success")) "Registered" else response.status
+            startActivityEvent.value = Pair(register, status)
         }
+
+        registerRequest = null
+        loginRequest = null
     }
 
     fun confirmRegister(kode: String) {
-        val tokenAuth = BuildConfig.API_KEY
-        myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+        val tokenAuth = myPreferences.getValue(Constants.TOKEN_AUTH).toString()
         val confirmRegisterResponse = repository.confirmRegister(appContext, kode, tokenAuth)
 
         confirmRegisterResponse.observeForever { response ->
-            if (response.status.contains("Success")) {
-                startActivityEvent.value = Pair(confirmed, "Confirmed")
-            } else {
-                startActivityEvent.value = Pair(confirmed, response.status)
-            }
+            val status = if (response.status.contains("Success")) "Confirmed" else response.status
+            startActivityEvent.value = Pair(confirmed, status)
         }
     }
 
     fun login() {
-        val tokenAuth = BuildConfig.API_KEY
-        myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+        val tokenAuth = myPreferences.getValue(Constants.TOKEN_AUTH).toString()
         val loginResponse = repository.login(appContext, loginRequest!!, tokenAuth)
 
         loginResponse.observeForever { response ->
@@ -101,5 +101,40 @@ class AuthViewModel(application: Application) : ViewModel() {
                 startActivityEvent.value = Pair(login, response.message)
             }
         }
+
+        registerRequest = null
+        loginRequest = null
     }
+
+    fun forgotPassword(email: String) {
+        val tokenAuth = myPreferences.getValue(Constants.TOKEN_AUTH).toString()
+        val forgotPasswordResponse = repository.forgotPassword(appContext, email, tokenAuth)
+
+        forgotPasswordResponse.observeForever { response ->
+            val status = if (response.status.contains("Success")) "Reset Code Sent" else response.status
+            startActivityEvent.value = Pair(forgot, status)
+        }
+    }
+
+    fun confirmForgotPassword(kode: String) {
+        val tokenAuth = BuildConfig.API_KEY
+        myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+        val confirmForgotPasswordResponse = repository.confirmForgotPassword(appContext, kode, tokenAuth)
+
+        confirmForgotPasswordResponse.observeForever { response ->
+            val status = if (response.status.contains("Success")) "Change Password" else response.status
+            startActivityEvent.value = Pair(confirmed, status)
+        }
+    }
+
+    fun changePassword(email: String, password: String) {
+        val tokenAuth = myPreferences.getValue(Constants.TOKEN_AUTH).toString()
+        val changePasswordResponse = repository.changePassword(appContext, email, password, password, tokenAuth)
+
+        changePasswordResponse.observeForever { response ->
+            val status = if (response.status.contains("Success")) "Password Changed" else response.status
+            startActivityEvent.value = Pair(change, status)
+        }
+    }
+
 }

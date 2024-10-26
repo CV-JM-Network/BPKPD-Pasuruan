@@ -112,4 +112,99 @@ class BaseRepositoryImpl : BaseRepository {
 
         return loginData
     }
+
+    override fun forgotPassword(context: Context, email: String, tokenAuth: String): LiveData<DefaultResponse> {
+        val forgotData = MutableLiveData<DefaultResponse>()
+
+        apiService.forgotPassword(
+            email,
+            "null",
+            tokenAuth,
+        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                if (response.isSuccessful) {
+                    forgotData.postValue(response.body())
+                } else {
+                    CustomHandler().responseHandler(context, "ForgotPassword|onResponse", response.message())
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
+                    forgotData.postValue(
+                        DefaultResponse(response.message(), errResp.first)
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                CustomHandler().responseHandler(context, "ForgotPassword|onFailure", t.message.toString())
+                forgotData.postValue(
+                    DefaultResponse(t.message.toString(), "error")
+                )
+            }
+        })
+
+        return forgotData
+    }
+
+    override fun confirmForgotPassword(context: Context, kode: String, tokenAuth: String): LiveData<DefaultResponse> {
+        val confirmForgotData = MutableLiveData<DefaultResponse>()
+
+        apiService.forgotPasswordConfirm(
+            kode,
+            "null",
+            tokenAuth,
+        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                if (response.isSuccessful) {
+                    confirmForgotData.postValue(response.body())
+                } else {
+                    CustomHandler().responseHandler(context, "ConfirmForgotPassword|onResponse", response.message())
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
+                    confirmForgotData.postValue(
+                        DefaultResponse(response.message(), errResp.first)
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                CustomHandler().responseHandler(context, "ConfirmForgotPassword|onFailure", t.message.toString())
+                confirmForgotData.postValue(
+                    DefaultResponse(t.message.toString(), "error")
+                )
+            }
+        })
+
+        return confirmForgotData
+    }
+
+    override fun changePassword(context: Context, email: String, password: String, repeatPassword: String, tokenAuth: String): LiveData<DefaultResponse> {
+        val changePasswordData = MutableLiveData<DefaultResponse>()
+
+        apiService.changePassword(
+            email,
+            password,
+            repeatPassword,
+            "null",
+            tokenAuth,
+        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                if (response.isSuccessful) {
+                    changePasswordData.postValue(response.body())
+                } else {
+                    CustomHandler().responseHandler(context, "ChangePassword|onResponse", response.message())
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
+                    changePasswordData.postValue(
+                        DefaultResponse(response.message(), errResp.first)
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                CustomHandler().responseHandler(context, "ChangePassword|onFailure", t.message.toString())
+                changePasswordData.postValue(
+                    DefaultResponse(t.message.toString(), "error")
+                )
+            }
+        })
+
+        return changePasswordData
+    }
 }

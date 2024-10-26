@@ -11,4 +11,7 @@ interface BaseRepository {
     fun register(context: Context, registerRequest: RegisterRequest, tokenAuth: String): LiveData<DefaultResponse>
     fun confirmRegister(context: Context, kode: String, tokenAuth: String): LiveData<DefaultResponse>
     fun login(context: Context, loginRequest: LoginRequest, tokenAuth: String): LiveData<LoginResponse>
+    fun forgotPassword(context: Context, email: String, tokenAuth: String): LiveData<DefaultResponse>
+    fun confirmForgotPassword(context: Context, kode: String, tokenAuth: String): LiveData<DefaultResponse>
+    fun changePassword(context: Context, email: String, password: String, repeatPassword: String, tokenAuth: String): LiveData<DefaultResponse>
 }

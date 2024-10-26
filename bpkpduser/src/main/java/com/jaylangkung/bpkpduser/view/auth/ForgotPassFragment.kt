@@ -12,24 +12,23 @@ import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.jaylangkung.bpkpduser.R
-import com.jaylangkung.bpkpduser.databinding.FragmentRegisterBinding
-import com.jaylangkung.bpkpduser.model.RegisterRequest
+import com.jaylangkung.bpkpduser.databinding.FragmentForgotPassBinding
+import com.jaylangkung.bpkpduser.utils.Transition
 import com.jaylangkung.bpkpduser.utils.Utils
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 import es.dmoral.toasty.Toasty
 
+class ForgotPassFragment : Fragment() {
 
-class RegisterFragment : Fragment() {
-
-    private lateinit var _binding: FragmentRegisterBinding
+    private lateinit var _binding: FragmentForgotPassBinding
     private val binding get() = _binding
     private lateinit var viewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentForgotPassBinding.inflate(inflater, container, false)
         val factory = ViewModelFactory.getInstance(requireActivity().application)
         viewModel = ViewModelProvider(requireActivity(), factory)[AuthViewModel::class.java]
 
@@ -37,6 +36,7 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -49,56 +49,46 @@ class RegisterFragment : Fragment() {
         })
 
         viewModel.startActivityEvent.observe(viewLifecycleOwner) { (key, it) ->
-            if (key == viewModel.register) {
+            if (key == viewModel.forgot) {
                 when (it) {
-                    "Registered" -> {
-                        Toasty.success(requireContext(), "Registrasi berhasil", Toasty.LENGTH_SHORT).show()
-                        Utils.loadFragment(requireActivity().supportFragmentManager, OtpFragment(), R.id.auth_fragment_container)
+                    "Reset Code Sent" -> {
+                        Toasty.success(requireContext(), "Reset code sent", Toasty.LENGTH_SHORT).show()
+                        val otpFragment = OtpFragment().apply {
+                            arguments = Bundle().apply {
+                                putString(OtpFragment.TAG, "forgotOtp")
+                            }
+                        }
+                        Utils.loadFragment(requireActivity().supportFragmentManager, otpFragment, R.id.auth_fragment_container, Transition.OPEN)
                     }
 
                     "Bad Request" -> {
-                        binding.btnRegister.hideProgress("Registrasi")
-                        Toasty.error(requireContext(), "Email sudah terdaftar", Toasty.LENGTH_SHORT).show()
+                        binding.btnSendResetCode.hideProgress(R.string.send_reset_code)
+                        Toasty.error(requireContext(), "Bad request", Toasty.LENGTH_SHORT).show()
                     }
 
-                    else -> {
-                        binding.btnLogin.hideProgress("Registrasi")
-                        Toasty.error(requireContext(), it, Toasty.LENGTH_SHORT).show()
+                    "Internal Server Error" -> {
+                        binding.btnSendResetCode.hideProgress(R.string.send_reset_code)
+                        Toasty.error(requireContext(), "Internal server error", Toasty.LENGTH_SHORT).show()
                     }
                 }
             }
         }
 
         binding.apply {
-            bindProgressButton(btnRegister)
-            btnRegister.setOnClickListener {
-                btnRegister.showProgress {
+            bindProgressButton(btnSendResetCode)
+            btnSendResetCode.setOnClickListener {
+                btnSendResetCode.showProgress {
                     progressColor = Color.WHITE
-                    buttonText = "Proses Registrasi"
+                    buttonText = "Loading"
                 }
-
-                viewModel.setRegisterRequest(
-                    RegisterRequest(
-                        email = tvValueEmailRegister.text.toString(),
-                        password = tvValuePasswordRegister.text.toString(),
-                        nama = tvValueNameRegister.text.toString(),
-                        alamat = tvValueAddressRegister.text.toString(),
-                        telpon = tvValuePhoneRegister.text.toString()
-                    )
-                )
-                val validate = viewModel.validate()
-                if (validate.isEmpty()) {
-                    viewModel.register()
+                val email = tvValueEmailForgot.text.toString()
+                if (email.isNotEmpty()) {
+                    viewModel.userEmail = email
+                    viewModel.forgotPassword(email)
                 } else {
-                    Toasty.error(requireContext(), validate, Toasty.LENGTH_SHORT).show()
-                    btnRegister.hideProgress(R.string.register_button)
+                    Toasty.error(requireContext(), "Email tidak boleh kosong", Toasty.LENGTH_SHORT).show()
+                    btnSendResetCode.hideProgress(R.string.send_reset_code)
                 }
-
-
-            }
-
-            btnLogin.setOnClickListener {
-                Utils.loadFragment(requireActivity().supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
             }
         }
     }

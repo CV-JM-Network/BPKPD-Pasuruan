@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
@@ -17,6 +16,7 @@ import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentLoginBinding
 import com.jaylangkung.bpkpduser.model.LoginRequest
 import com.jaylangkung.bpkpduser.utils.Constants
+import com.jaylangkung.bpkpduser.utils.Utils
 import com.jaylangkung.bpkpduser.view.MainActivity
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
@@ -93,14 +93,17 @@ class LoginFragment : Fragment() {
                 if (validate.isEmpty()) {
                     viewModel.login()
                 } else {
-                    Toasty.error(requireContext(), validate, Toasty.LENGTH_LONG).show()
+                    Toasty.error(requireContext(), validate, Toasty.LENGTH_SHORT).show()
                     btnLogin.hideProgress(R.string.login_button)
                 }
             }
 
             btnRegister.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction().setReorderingAllowed(true).replace(R.id.auth_fragment_container, RegisterFragment())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+                Utils.loadFragment(requireActivity().supportFragmentManager, RegisterFragment(), R.id.auth_fragment_container)
+            }
+
+            tvForgotPassword.setOnClickListener {
+                Utils.loadFragment(requireActivity().supportFragmentManager, ForgotPassFragment(), R.id.auth_fragment_container)
             }
         }
     }

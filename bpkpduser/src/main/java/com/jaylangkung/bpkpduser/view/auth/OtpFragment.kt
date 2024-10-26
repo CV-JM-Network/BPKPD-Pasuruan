@@ -9,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentOtpBinding
+import com.jaylangkung.bpkpduser.utils.Utils
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 import es.dmoral.toasty.Toasty
@@ -29,6 +29,10 @@ class OtpFragment : Fragment() {
     private lateinit var _binding: FragmentOtpBinding
     private val binding get() = _binding
     private lateinit var viewModel: AuthViewModel
+
+    companion object {
+        const val TAG = "OtpFragment"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -75,12 +79,11 @@ class OtpFragment : Fragment() {
                             code.append(it.text.toString())
                         }
 
-                        // performClick() when it's the last field
                         CoroutineScope(Dispatchers.Main).launch {
-                            delay(2000) // Delay for 2 seconds
-                        }
-                        if (s.toString().isNotEmpty() && index == otpFields.size - 1) {
-                            btnSubmitOtp.performClick()
+                            delay(500) // Delay for 0.5 seconds
+                            if (s.toString().isNotEmpty() && index == otpFields.size - 1) {
+                                btnSubmitOtp.performClick()
+                            }
                         }
 
                     }
@@ -92,8 +95,12 @@ class OtpFragment : Fragment() {
                     when (it) {
                         "Confirmed" -> {
                             Toasty.success(requireContext(), "Kode Konfirmasi Valid", Toasty.LENGTH_SHORT).show()
-                            requireActivity().supportFragmentManager.beginTransaction().setReorderingAllowed(true).replace(R.id.auth_fragment_container, LoginFragment())
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+                            Utils.loadFragment(requireActivity().supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
+                        }
+
+                        "Change Password" -> {
+                            Toasty.success(requireContext(), "Kode Konfirmasi Valid", Toasty.LENGTH_SHORT).show()
+                            Utils.loadFragment(requireActivity().supportFragmentManager, ChangePassFragment(), R.id.auth_fragment_container)
                         }
 
                         "Bad Request" -> {
@@ -119,7 +126,12 @@ class OtpFragment : Fragment() {
                     progressColor = Color.WHITE
                     buttonText = "Proses Konfirmasi"
                 }
-                viewModel.confirmRegister(code.toString())
+                val tag = requireArguments().getString(TAG)
+                if (tag == "registerOtp") {
+                    viewModel.confirmRegister(code.toString())
+                } else {
+                    viewModel.confirmForgotPassword(code.toString())
+                }
             }
         }
     }

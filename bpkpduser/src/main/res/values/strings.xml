@@ -20,4 +20,8 @@
     <string name="submit_otp">Konfirmasi</string>
     <string name="otp_description">Kode konfirmasi dikirim ke email dan nomer WA Anda.\nPendaftaran dibatalkan otomatis selama 20 menit jika tidak melakukan konfirmasi.</string>
     <string name="forgot_password">Lupa password?</string>
+    <string name="forgot_password_title">Lupa Password</string>
+    <string name="send_reset_code">Kirim</string>
+    <string name="change_password_title">Ganti Password</string>
+    <string name="password_confirm">Konfirmasi Password</string>
 </resources>

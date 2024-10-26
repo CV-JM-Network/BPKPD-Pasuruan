@@ -2,10 +2,10 @@ package com.jaylangkung.bpkpduser.view.auth
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.ActivityAuthBinding
+import com.jaylangkung.bpkpduser.utils.Utils
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 
@@ -25,30 +25,23 @@ class AuthActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(application)
         viewModel = ViewModelProvider(this@AuthActivity, factory)[AuthViewModel::class.java]
 
+        viewModel.init()
         if (intent.hasExtra(DESTINATION)) {
             when (intent.getStringExtra(DESTINATION)) {
                 "login" -> {
-                    loadFragment(LoginFragment())
+                    Utils.loadFragment(supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
                 }
 
                 "register" -> {
-                    loadFragment(RegisterFragment())
+                    Utils.loadFragment(supportFragmentManager, RegisterFragment(), R.id.auth_fragment_container)
                 }
 
                 "otp" -> {
-                    loadFragment(OtpFragment())
+                    Utils.loadFragment(supportFragmentManager, OtpFragment(), R.id.auth_fragment_container)
                 }
             }
         } else {
-            loadFragment(LoginFragment())
+            Utils.loadFragment(supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
         }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .replace(R.id.auth_fragment_container, fragment)
-            .setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit()
     }
 }
