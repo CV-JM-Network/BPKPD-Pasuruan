@@ -10,7 +10,7 @@ class ViewModelFactory private constructor(private val application: Application)
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(application) as T
-//            modelClass.isAssignableFrom(ScanQrViewModel::class.java) -> ScanQrViewModel(application) as T
+            modelClass.isAssignableFrom(SettingViewModel::class.java) -> SettingViewModel(application) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }

@@ -15,7 +15,7 @@ import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
 import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentOtpBinding
-import com.jaylangkung.bpkpduser.utils.Utils
+import com.jaylangkung.bpkpduser.utils.Utils.loadFragment
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 import es.dmoral.toasty.Toasty
@@ -95,12 +95,12 @@ class OtpFragment : Fragment() {
                     when (it) {
                         "Confirmed" -> {
                             Toasty.success(requireContext(), "Kode Konfirmasi Valid", Toasty.LENGTH_SHORT).show()
-                            Utils.loadFragment(requireActivity().supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
+                            loadFragment(requireActivity().supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
                         }
 
                         "Change Password" -> {
                             Toasty.success(requireContext(), "Kode Konfirmasi Valid", Toasty.LENGTH_SHORT).show()
-                            Utils.loadFragment(requireActivity().supportFragmentManager, ChangePassFragment(), R.id.auth_fragment_container)
+                            loadFragment(requireActivity().supportFragmentManager, ChangePassFragment(), R.id.auth_fragment_container)
                         }
 
                         "Bad Request" -> {

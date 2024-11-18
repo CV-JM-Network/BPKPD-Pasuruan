@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.ActivityAuthBinding
-import com.jaylangkung.bpkpduser.utils.Utils
+import com.jaylangkung.bpkpduser.utils.Utils.loadFragment
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 
@@ -33,6 +33,6 @@ class AuthActivity : AppCompatActivity() {
         viewModel.init()
 
         // load default fragment
-        Utils.loadFragment(supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
+        loadFragment(supportFragmentManager, LoginFragment(), R.id.auth_fragment_container)
     }
 }

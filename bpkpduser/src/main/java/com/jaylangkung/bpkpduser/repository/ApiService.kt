@@ -66,13 +66,13 @@ interface AuthService {
         @Header("Authorization") authorization: String
     ): Call<DefaultResponse>
 
-//    @FormUrlEncoded
-//    @POST("webapp")
-//    fun loginWebapp(
-//        @Field("idadmin") idadmin: String,
-//        @Field("device_id") deviceId: String,
-//        @Header("Authorization") authorization: String,
-//    ): Call<LoginWebappResponse>
+    @FormUrlEncoded
+    @POST("user/webapp")
+    fun loginWebapp(
+        @Field("iduser") iduser: String,
+        @Field("device_id") code: String,
+        @Header("Authorization") authorization: String,
+    ): Call<DefaultResponse>
 }
 
 interface UserService {

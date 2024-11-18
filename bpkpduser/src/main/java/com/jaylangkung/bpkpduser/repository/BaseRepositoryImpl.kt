@@ -6,9 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.jaylangkung.bpkpduser.model.DefaultResponse
 import com.jaylangkung.bpkpduser.model.LoginRequest
 import com.jaylangkung.bpkpduser.model.LoginResponse
+import com.jaylangkung.bpkpduser.model.LoginWebAppRequest
 import com.jaylangkung.bpkpduser.model.RegisterRequest
 import com.jaylangkung.bpkpduser.utils.CustomHandler
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class BaseRepositoryImpl : BaseRepository {
@@ -25,7 +27,7 @@ class BaseRepositoryImpl : BaseRepository {
             registerRequest.telpon,
             "null",
             tokenAuth,
-        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+        ).enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if (response.isSuccessful) {
                     registerData.postValue(response.body())
@@ -56,13 +58,12 @@ class BaseRepositoryImpl : BaseRepository {
             kode,
             "null",
             tokenAuth,
-        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+        ).enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if (response.isSuccessful) {
                     confirmData.postValue(response.body())
                 } else {
                     CustomHandler().responseHandler(context, "ConfirmRegister|onResponse", response.message())
-                    val test = response.errorBody().toString()
                     val errResp = CustomHandler().parseError(response.errorBody()!!.string())
                     confirmData.postValue(
                         DefaultResponse(response.message(), errResp.first)
@@ -89,7 +90,7 @@ class BaseRepositoryImpl : BaseRepository {
             loginRequest.password,
             "null",
             tokenAuth,
-        ).enqueue(object : retrofit2.Callback<LoginResponse> {
+        ).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     loginData.postValue(response.body())
@@ -113,6 +114,37 @@ class BaseRepositoryImpl : BaseRepository {
         return loginData
     }
 
+    override fun loginWebApp(context: Context, loginWebAppRequest: LoginWebAppRequest, tokenAuth: String): LiveData<DefaultResponse> {
+        val loginWebappData = MutableLiveData<DefaultResponse>()
+
+        apiService.loginWebapp(
+            loginWebAppRequest.idUser,
+            loginWebAppRequest.qrString,
+            tokenAuth,
+        ).enqueue(object : Callback<DefaultResponse> {
+            override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
+                if (response.isSuccessful) {
+                    loginWebappData.postValue(response.body())
+                } else {
+                    CustomHandler().responseHandler(context, "LoginWebapp|onResponse", response.message())
+                    val errResp = CustomHandler().parseError(response.errorBody()!!.string())
+                    loginWebappData.postValue(
+                        DefaultResponse(response.message(), errResp.first)
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                CustomHandler().responseHandler(context, "LoginWebapp|onFailure", t.message.toString())
+                loginWebappData.postValue(
+                    DefaultResponse(t.message.toString(), "error")
+                )
+            }
+        })
+
+        return loginWebappData
+    }
+
     override fun forgotPassword(context: Context, email: String, tokenAuth: String): LiveData<DefaultResponse> {
         val forgotData = MutableLiveData<DefaultResponse>()
 
@@ -120,7 +152,7 @@ class BaseRepositoryImpl : BaseRepository {
             email,
             "null",
             tokenAuth,
-        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+        ).enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if (response.isSuccessful) {
                     forgotData.postValue(response.body())
@@ -151,7 +183,7 @@ class BaseRepositoryImpl : BaseRepository {
             kode,
             "null",
             tokenAuth,
-        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+        ).enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if (response.isSuccessful) {
                     confirmForgotData.postValue(response.body())
@@ -184,7 +216,7 @@ class BaseRepositoryImpl : BaseRepository {
             repeatPassword,
             "null",
             tokenAuth,
-        ).enqueue(object : retrofit2.Callback<DefaultResponse> {
+        ).enqueue(object : Callback<DefaultResponse> {
             override fun onResponse(call: Call<DefaultResponse>, response: Response<DefaultResponse>) {
                 if (response.isSuccessful) {
                     changePasswordData.postValue(response.body())

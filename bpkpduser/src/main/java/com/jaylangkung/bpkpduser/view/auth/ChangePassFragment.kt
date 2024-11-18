@@ -14,7 +14,7 @@ import com.github.razir.progressbutton.showProgress
 import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentChangePassBinding
 import com.jaylangkung.bpkpduser.utils.Transition
-import com.jaylangkung.bpkpduser.utils.Utils
+import com.jaylangkung.bpkpduser.utils.Utils.loadFragment
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 import es.dmoral.toasty.Toasty
@@ -53,7 +53,7 @@ class ChangePassFragment : Fragment() {
                 when (it) {
                     "Password Changed" -> {
                         Toasty.success(requireContext(), "Password changed", Toasty.LENGTH_SHORT).show()
-                        Utils.loadFragment(requireActivity().supportFragmentManager, LoginFragment(), R.id.auth_fragment_container, Transition.OPEN)
+                        loadFragment(requireActivity().supportFragmentManager, LoginFragment(), R.id.auth_fragment_container, Transition.OPEN)
                     }
 
                     "Bad Request" -> {

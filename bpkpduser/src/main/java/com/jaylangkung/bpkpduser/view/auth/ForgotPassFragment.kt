@@ -14,7 +14,7 @@ import com.github.razir.progressbutton.showProgress
 import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentForgotPassBinding
 import com.jaylangkung.bpkpduser.utils.Transition
-import com.jaylangkung.bpkpduser.utils.Utils
+import com.jaylangkung.bpkpduser.utils.Utils.loadFragment
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 import es.dmoral.toasty.Toasty
@@ -58,7 +58,7 @@ class ForgotPassFragment : Fragment() {
                                 putString(OtpFragment.TAG, "forgotOtp")
                             }
                         }
-                        Utils.loadFragment(requireActivity().supportFragmentManager, otpFragment, R.id.auth_fragment_container, Transition.OPEN)
+                        loadFragment(requireActivity().supportFragmentManager, otpFragment, R.id.auth_fragment_container, Transition.OPEN)
                     }
 
                     "Bad Request" -> {

@@ -16,7 +16,7 @@ import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentLoginBinding
 import com.jaylangkung.bpkpduser.model.LoginRequest
 import com.jaylangkung.bpkpduser.utils.Constants
-import com.jaylangkung.bpkpduser.utils.Utils
+import com.jaylangkung.bpkpduser.utils.Utils.loadFragment
 import com.jaylangkung.bpkpduser.view.MainActivity
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
@@ -99,11 +99,11 @@ class LoginFragment : Fragment() {
             }
 
             btnRegister.setOnClickListener {
-                Utils.loadFragment(requireActivity().supportFragmentManager, RegisterFragment(), R.id.auth_fragment_container, backstack = true)
+                loadFragment(requireActivity().supportFragmentManager, RegisterFragment(), R.id.auth_fragment_container, backstack = true)
             }
 
             tvForgotPassword.setOnClickListener {
-                Utils.loadFragment(requireActivity().supportFragmentManager, ForgotPassFragment(), R.id.auth_fragment_container, backstack = true)
+                loadFragment(requireActivity().supportFragmentManager, ForgotPassFragment(), R.id.auth_fragment_container, backstack = true)
             }
         }
     }

@@ -8,6 +8,11 @@ data class LoginRequest(
     @SerializedName("password") val password: String
 )
 
+data class LoginWebAppRequest(
+    @SerializedName("idUser") val idUser: String,
+    @SerializedName("qrString") val qrString: String
+)
+
 data class LoginResponse(
     @SerializedName("data") val data: UserData?,
     @SerializedName("message") val message: String,

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jaylangkung.bpkpduser.BuildConfig
 import com.jaylangkung.bpkpduser.model.LoginRequest
+import com.jaylangkung.bpkpduser.model.LoginWebAppRequest
 import com.jaylangkung.bpkpduser.model.RegisterRequest
 import com.jaylangkung.bpkpduser.repository.BaseRepositoryImpl
 import com.jaylangkung.bpkpduser.utils.Constants
@@ -15,20 +16,27 @@ class AuthViewModel(application: Application) : ViewModel() {
     private val appContext = application
     private val repository = BaseRepositoryImpl()
     private var myPreferences = MySharedPreferences(appContext)
+
     private var registerRequest: RegisterRequest? = null
     private var loginRequest: LoginRequest? = null
+    private var loginWebAppRequest: LoginWebAppRequest? = null
 
     val startActivityEvent = MutableLiveData<Pair<String, String>>()
     var userEmail = "user_email"
     val register = "Regis"
     val confirmed = "Confirmed"
     val login = "Login"
+    val webapp = "Webapp"
     val forgot = "Forgot"
     val change = "Change"
 
     fun init() {
         val tokenAuth = BuildConfig.API_KEY
         myPreferences.setValue(Constants.TOKEN_AUTH, tokenAuth)
+
+        if (myPreferences.getValue(Constants.USER).toString() == Constants.LOGIN) {
+            startActivityEvent.value = Pair(login, Constants.LOGIN)
+        }
     }
 
     fun setRegisterRequest(registerRequest: RegisterRequest) {
@@ -57,6 +65,16 @@ class AuthViewModel(application: Application) : ViewModel() {
 
         val errMsg = errors.joinToString(", ") + " tidak boleh kosong"
         return if (errors.isEmpty()) "" else errMsg
+    }
+
+    fun validateQRCode(qrString: String): String {
+        if (qrString.contains("webapp")) {
+            val idUser = myPreferences.getValueInteger(Constants.USER_ID).toString()
+            loginWebAppRequest = LoginWebAppRequest(idUser, qrString)
+            return ""
+        } else {
+            return "qr_code_invalid"
+        }
     }
 
     fun register() {
@@ -104,6 +122,16 @@ class AuthViewModel(application: Application) : ViewModel() {
 
         registerRequest = null
         loginRequest = null
+    }
+
+    fun loginWebApp() {
+        val tokenAuth = myPreferences.getValue(Constants.TOKEN_AUTH).toString()
+        val loginWebAppResponse = repository.loginWebApp(appContext, loginWebAppRequest!!, tokenAuth)
+
+        loginWebAppResponse.observeForever { response ->
+            val status = if (response.status.contains("Success")) "Webapp Success" else response.status
+            startActivityEvent.value = Pair(webapp, status)
+        }
     }
 
     fun forgotPassword(email: String) {

@@ -3,6 +3,7 @@ package com.jaylangkung.bpkpduser.utils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import java.util.Locale
 
 object Utils {
 
@@ -18,6 +19,10 @@ object Utils {
         val dateArray = date.split(" ")
         val dateArray2 = dateArray[0].split("-")
         return "${dateArray2[2]}-${dateArray2[1]}-${dateArray2[0]}"
+    }
+
+    private fun formatNumber(number: Int): String {
+        return String.format(Locale("id", "ID"), "%,d", number).replace(',', '.')
     }
 
     fun loadFragment(

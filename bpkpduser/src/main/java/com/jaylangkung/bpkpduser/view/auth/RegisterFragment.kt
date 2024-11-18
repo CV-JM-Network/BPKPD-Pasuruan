@@ -15,10 +15,10 @@ import com.jaylangkung.bpkpduser.R
 import com.jaylangkung.bpkpduser.databinding.FragmentRegisterBinding
 import com.jaylangkung.bpkpduser.model.RegisterRequest
 import com.jaylangkung.bpkpduser.utils.Utils
+import com.jaylangkung.bpkpduser.utils.Utils.loadFragment
 import com.jaylangkung.bpkpduser.viewmodel.AuthViewModel
 import com.jaylangkung.bpkpduser.viewmodel.ViewModelFactory
 import es.dmoral.toasty.Toasty
-
 
 class RegisterFragment : Fragment() {
 
@@ -53,7 +53,7 @@ class RegisterFragment : Fragment() {
                 when (it) {
                     "Registered" -> {
                         Toasty.success(requireContext(), "Registrasi berhasil", Toasty.LENGTH_SHORT).show()
-                        Utils.loadFragment(requireActivity().supportFragmentManager, OtpFragment(), R.id.auth_fragment_container)
+                        loadFragment(requireActivity().supportFragmentManager, OtpFragment(), R.id.auth_fragment_container)
                     }
 
                     "Bad Request" -> {

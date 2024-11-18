@@ -24,4 +24,10 @@
     <string name="send_reset_code">Kirim</string>
     <string name="change_password_title">Ganti Password</string>
     <string name="password_confirm">Konfirmasi Password</string>
+    <string name="bottom_nav_home">Beranda</string>
+    <string name="bottom_nav_scan_qr">Scan QR Code</string>
+    <string name="bottom_nav_settings">Pengaturan</string>
+    <string name="change_photo">ganti foto</string>
+    <string name="btn_save">Update Profile</string>
+    <string name="logout">Logout</string>
 </resources>
